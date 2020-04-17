@@ -169,4 +169,29 @@ function UpdatePosition() {
 	} else {
 		Draw();
 	}
+	
+
+
+	// taday date for the 
+
+	let today = new Date().toISOString().substr(0, 10);
+	document.querySelector("#today").value = today;
+	document.querySelector("#today").valueAsDate = new Date();
+
+
+	//validate password
+	$(document).ready(function() {
+		$('#submit').click(function(event){
+		
+			data = $('.password').val();
+			var len = data.length;
+			
+			if(len < 6) {
+				alert("Password cannot be lass then 6");
+				// Prevent form submission
+				event.preventDefault();
+			}
+		});
+	});
+	
 }

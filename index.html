@@ -3,19 +3,80 @@
 	<head>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
+		<link rel="stylesheet" href="./styleSheet.css">
 	</head>
 
 	<body>
-		<div id="score">
-			<label for="lblScore">SCORE:</label>
-			<input id="lblScore" type="text" />
+		<section id='Welcome' class='section'>
+			<div class = 'logo' align='middle'>
+				<img src="./images/PacManLogo.png" style="width:30%">
+			</div>
+			<div id="buttons" class="section" align="middle">
+				<a href="#Login" class="myButton" style="width: 10%;">Login</a>
+
+				<a href="#Register" class="myButton" style="width: 10%;">Register</a>
+			</div>
+		
+			
+		</section>
+		<section id='RegisterAndLogin' class='section'>
+				<div class="main-w3layouts wrapper">
+		<h1>Register</h1>
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+				<form action="#" method="post" autocomplete="on">
+					<input class="text" type="text" name="Username" placeholder="Username" required="">
+					<br>
+					<input class="password"  type="password" name="password" placeholder="Password" required="" >
+					<br>
+					<input class="text" type="text" name="Full Name" placeholder="Full Name" required="">
+					<input class="email" type="email" name="email" placeholder="Email" required="">				
+					<input type="date" id="today" name="trip-start"  min="1910-01-01" max="today">
+					<br>
+					<br>			
+       								
+					<input id ="submit" type="submit" value="SUBMIT" style="font-size:larger">
+				</form>
+			</div>
 		</div>
-		<div id="time">
-			<label for="lblTime">TIME:</label>
-			<input id="lblTime" type="text" />
-		</div>
-		<div id="game">
-			<canvas id="canvas" height="600" width="600"></canvas>
-		</div>
+	</div>
+		</section>
+		<section id='RegisterAndLogin' class='section' >
+			<h1>Login</h1>
+			<div class="main-agileinfo">
+				<div class="agileits-top">
+					<form action="#" method="post" autocomplete="on">
+						<input class="text" type="text" name="Username" placeholder="Username" required="">
+						<br>
+						<input class="text" type="password" name="password" placeholder="Password" required="">				   
+						<input type="submit" value="SUBMIT" style="font-size:larger">
+					</form>
+				</div>
+			</div>
+		</section>
+		<section id='Settings' class='section'>
+			<p>set up conterollers</p>
+		</section>
+		<section id='About' class='section'>
+
+		</section>
+
+
+		<section id='gamePlay' class='section'>
+			<div id="score">
+				<label for="lblScore">SCORE:</label>
+				<input id="lblScore" type="text" />
+			</div>
+			<div id="time">
+				<label for="lblTime">TIME:</label>
+				<input id="lblTime" type="text" />
+			</div>
+			<div id="game">
+				<canvas id="canvas" height="600" width="600"></canvas>
+			</div>
+		</section>
+		
+		
+		  
 	</body>
 </html>
