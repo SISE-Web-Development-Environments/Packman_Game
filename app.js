@@ -7,11 +7,42 @@ var start_time;
 var time_elapsed;
 var interval;
 
+
+
+var users = [
+	{
+		username:"p",
+		password:"p"
+	},
+]
+
+
+
 $(document).ready(function() {
 	context = canvas.getContext("2d");
 	Start();
 });
 
+
+function isValidUserName(){
+	var username=document.getElementById("username1").value;
+	var password= document.getElementById("password1").value;
+	//var isExist =false;
+		for(i=0;i<users.length;i++){
+			if(username==users[i].username && password==users[i].password){
+				//document.getElementById(msg).style.display="none";
+				return true;
+				//isExist= true;
+			}
+			else{
+				//isExist= false;	
+				//window.alert("no good");
+						
+				//document.getElementById(msg).style.display="inline";
+				return false;
+			}
+		}
+}
 
 function isValidPassWord(pass,msg){
 	let isValidPassWord;
