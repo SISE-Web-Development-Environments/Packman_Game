@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script type="text/javascript"  src="./app.js"></script>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
-		<script type="text/javascript" src="./app.js"></script>
 		<link rel="stylesheet" href="./styleSheet.css">
 		<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -35,26 +35,26 @@
 					<input class="text" type="text" name="Username" placeholder="Username" required="" minlength="1" aria-required="true">
 					<br>
 					<br>
-					<br>
 					
-					<input id="password" type="password" name="password" placeholder="Password" required="" required onchange = "isValidPassWord(value,'wrongPassword');">
+					<input class="text" id="password" type="password" name="password" placeholder="Password" required="" required onchange = "isValidPassWord(value,'wrongPassword');">
 					<label id="wrongPassword" style="display:none ; color: red;" > wrong Password</label>
 					<br>
 					<br>
-					<br>	
 
-					<input class="text" type="text" id="FirstName" name="FullName" placeholder="First Name" required="" aria-required="true" required onchange="isValidFirstName(value,'wrongFirstName');">
-					<!-- <label id="wrongFirstName" style="display:none ; color: red;" > wrong FirstName</label> -->
+					<input class="text" type="text" id="FirstName" name="FirstName" placeholder="First Name" required="" aria-required="true" required onchange="isValidFirstName(value,'wrongFirstName');">
+					<label id="wrongFirstName" style="display:none ; color: red;" > wrong FirstName</label>
+					<br>
 					<br>
 
-
 					<input class="text" type="text" id="LastName" name="LastName" placeholder="Last Name" required="" aria-required="true" required onchange="isValidLastName(value,'wrongLastName');">
-					<!-- <label id="wrongLastName" style="display:none ; color: red;" > wrong LastName</label> -->
-					
+					<label id="wrongLastName" style="display:none ; color: red;" > wrong LastName</label>
+					<br>
+					<br>
 
-					<input class="email" type="email" name="email" placeholder="Email" required=""  aria-required="true" required onchange="isValidEmail(value,'wrongEmail');">	
-					<!-- <label id="wrongEmail" style="display:none ; color: red;" > wrong email</label>	 -->
-				
+					<input  class="text" type="email" name="email" placeholder="Email" required=""  aria-required="true" required onchange="isValidEmail(value,'wrongEmail');">	
+					<label id="wrongEmail" style="display:none ; color: red;" > wrong email</label>	
+					<br>
+					<br>
 					
 
 					<input type="date" id="today" name="trip-start"  min="1910-01-01" max="today">

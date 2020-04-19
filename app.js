@@ -12,6 +12,83 @@ $(document).ready(function() {
 	Start();
 });
 
+
+function isValidPassWord(pass,msg){
+	let isValidPassWord;
+	if(pass.length<6){
+		isValidPassWord=false;
+	}
+	else if(pass.search(/[\!\@\#\$\%\^\&\*\(\)\_\+\,\.\?\\\'\`\~\{\}\[\]\|\-]/) != -1){
+		isValidPassWord=false;
+	}
+	else if(pass.search(/[^a-zA-Z0-9]/)!=-1){
+		isValidPassWord = false;
+	}
+	else{
+		isValidPassWord=true;
+	}
+	if(isValidPassWord==true){
+		document.getElementById(msg).style.display="none";
+	}
+	else{
+		document.getElementById(msg).style.display="inline";
+	}
+}
+	
+
+
+	function isValidFirstName(FName,msg){
+		let isValidFirstName;
+		let req= '/^[a-zA-Z]{2}$/';
+		if(!FName.match(req)){
+			isValidFirstName=false;
+		}
+		else{
+			isValidFirstName=true;
+		}
+		if(isValidFirstName==true){
+			document.getElementById(msg).style.display="none";
+		}
+		else{
+			document.getElementById(msg).style.display="inline";
+		}
+	}
+
+	function isValidLastName(LName ,msg){
+		let isValidLastName;
+		let req= '/^[a-zA-Z]{2}$/';
+		if(!LName.match(req)){
+			isValidLastName=false;
+		}
+		else{
+			isValidLastName=true;
+		}
+		if(isValidLastName==true){
+			document.getElementById(msg).style.display="none";
+		}
+		else{
+			document.getElementById(msg).style.display="inline";
+		}
+	}
+
+	function isValidEmail(Email,msg){
+		let isValidEmail;
+		let emailRegex = '^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$';
+		if(!emailRegex.search(Email)){
+			isValidEmail=false;
+		}
+		else{
+			isValidEmail=true;
+		}
+		if(isValidLastName==true){
+			document.getElementById(msg).style.display="none";
+		}
+		else{
+			document.getElementById(msg).style.display="inline";
+		}
+	}
+
+
 function Start() {
 	board = new Array();
 	score = 0;
@@ -171,80 +248,7 @@ function UpdatePosition() {
 	}
 	
 
-	// valid password func
-	function isValidPassWord(pass,msg){
-		let isValidPassWord;
-		if(pass.length<6){
-			isValidPassWord=false;
-		}
-		else if(pass.search(/[\!\@\#\$\%\^\&\*\(\)\_\+\,\.\?\\\'\`\~\{\}\[\]\|\-]/) != -1){
-			isValidPassWord=false;
-		}
-		else if(pass.search(/[^a-zA-Z0-9]/)!=-1){
-			isValidPassWord = false;
-		}
-		else{
-			isValidPassWord=true;
-		}
-		if(isValidPassWord==true){
-			document.getElementById(msg).style.display="none";
-		}
-		else{
-			document.getElementById(msg).style.display="inline";
-		}
-	}
-
-
-	// function isValidFirstName(FName,msg){
-	// 	let isValidFirstName;
-	// 	let req= '/^[a-zA-Z]{2}$/';
-	// 	if(req.search(FName)!=-1){
-	// 		isValidFirstName=false;
-	// 	}
-	// 	else{
-	// 		isValidFirstName=true;
-	// 	}
-	// 	if(isValidFirstName==true){
-	// 		document.getElementById(msg).style.display="none";
-	// 	}
-	// 	else{
-	// 		document.getElementById(msg).style.display="inline";
-	// 	}
-	// }
-
-	// function isValidLastName(LName,msg){
-	// 	let isValidLastName;
-	// 	let req= '/^[a-zA-Z]{2}$/';
-	// 	if(req.search(LName)!=-1){
-	// 		isValidLastName=false;
-	// 	}
-	// 	else{
-	// 		isValidLastName=true;
-	// 	}
-	// 	if(isValidLastName==true){
-	// 		document.getElementById(msg).style.display="none";
-	// 	}
-	// 	else{
-	// 		document.getElementById(msg).style.display="inline";
-	// 	}
-	// }
-
-	// function isValidEmail(Email,msg){
-	// 	let isValidEmail;
-	// 	let emailRegex = '^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$';
-	// 	if(emailRegex.search(Email)!=-1){
-	// 		isValidEmail=false;
-	// 	}
-	// 	else{
-	// 		isValidEmail=true;
-	// 	}
-	// 	if(isValidLastName==true){
-	// 		document.getElementById(msg).style.display="none";
-	// 	}
-	// 	else{
-	// 		document.getElementById(msg).style.display="inline";
-	// 	}
-	// }
+	
 
 
 
