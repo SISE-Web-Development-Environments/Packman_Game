@@ -171,27 +171,208 @@ function UpdatePosition() {
 	}
 	
 
+	// valid password func
+	function isValidPassWord(pass,msg){
+		let isValidPassWord;
+		if(pass.length<6){
+			isValidPassWord=false;
+		}
+		else if(pass.search(/[\!\@\#\$\%\^\&\*\(\)\_\+\,\.\?\\\'\`\~\{\}\[\]\|\-]/) != -1){
+			isValidPassWord=false;
+		}
+		else if(pass.search(/[^a-zA-Z0-9]/)!=-1){
+			isValidPassWord = false;
+		}
+		else{
+			isValidPassWord=true;
+		}
+		if(isValidPassWord==true){
+			document.getElementById(msg).style.display="none";
+		}
+		else{
+			document.getElementById(msg).style.display="inline";
+		}
+	}
+
+
+	// function isValidFirstName(FName,msg){
+	// 	let isValidFirstName;
+	// 	let req= '/^[a-zA-Z]{2}$/';
+	// 	if(req.search(FName)!=-1){
+	// 		isValidFirstName=false;
+	// 	}
+	// 	else{
+	// 		isValidFirstName=true;
+	// 	}
+	// 	if(isValidFirstName==true){
+	// 		document.getElementById(msg).style.display="none";
+	// 	}
+	// 	else{
+	// 		document.getElementById(msg).style.display="inline";
+	// 	}
+	// }
+
+	// function isValidLastName(LName,msg){
+	// 	let isValidLastName;
+	// 	let req= '/^[a-zA-Z]{2}$/';
+	// 	if(req.search(LName)!=-1){
+	// 		isValidLastName=false;
+	// 	}
+	// 	else{
+	// 		isValidLastName=true;
+	// 	}
+	// 	if(isValidLastName==true){
+	// 		document.getElementById(msg).style.display="none";
+	// 	}
+	// 	else{
+	// 		document.getElementById(msg).style.display="inline";
+	// 	}
+	// }
+
+	// function isValidEmail(Email,msg){
+	// 	let isValidEmail;
+	// 	let emailRegex = '^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$';
+	// 	if(emailRegex.search(Email)!=-1){
+	// 		isValidEmail=false;
+	// 	}
+	// 	else{
+	// 		isValidEmail=true;
+	// 	}
+	// 	if(isValidLastName==true){
+	// 		document.getElementById(msg).style.display="none";
+	// 	}
+	// 	else{
+	// 		document.getElementById(msg).style.display="inline";
+	// 	}
+	// }
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// taday date for the 
+
 
 	let today = new Date().toISOString().substr(0, 10);
 	document.querySelector("#today").value = today;
 	document.querySelector("#today").valueAsDate = new Date();
 
 
-	//validate password
-	$(document).ready(function() {
-		$('#submit').click(function(event){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// var fullNameValidate = function(){
+	// 	var fullName= document.getElementById('FullName').value;
+	// 	var req=/^[a-zA-Z ]+$/;
+
+	// 	if(!req.test(fullName)){
+	// 		window.alert("enter only characters")
+	// 	}
+	// }
+
+
+	// validation of Register
+
+	// $.validator.setDefaults({
+	// 	submitHandler: function() {
+	// 		alert("submitted!");
+	// 	}
+	// });
+
+	// $().ready(function() {
+	// 	// validate signup form on keyup and submit
+	// 	$("#Register").validate({
+	// 		rules: {
+	// 			Username: "required",
+	// 			username: {
+	// 				required: true,
+	// 				minlength: 2
+	// 			},
+	// 			password: {
+	// 				required: true,
+	// 				minlength: 6
+					
+	// 			},
+	// 			email: {
+	// 				required: true,
+	// 				email: true
+	// 			},
+	// 			FullName:{
+	// 				required: true,
+					
+					
+	// 			}
+	// 		},
+	// 		messages: {
+	// 			Username: "Please enter your Username",
+	// 			username: {
+	// 				required: "Please enter a username",
+	// 				minlength: "Your username must consist of at least 2 characters"
+	// 			},
+	// 			password: {
+	// 				required: "Please provide a password",
+	// 				minlength: "Your password must be at least 6 characters long"
+	// 			},
+	// 			email: "Please enter a valid email address",
+	// 		}
+	// 	});
+
+		// propose username by combining first- and lastname
+
+		// $("#username").focus(function() {
+		// 	var Username = $("#Username").val();
+		// 	var lastname = $("#lastname").val();
+		// 	if (firstname && lastname && !this.value) {
+		// 		this.value = firstname + "." + lastname;
+		// 	}
+		// });
+
 		
-			data = $('.password').val();
-			var len = data.length;
-			
-			if(len < 6) {
-				alert("Password cannot be lass then 6");
-				// Prevent form submission
-				event.preventDefault();
-			}
-		});
-	});
+		
+		// newsletter topics are optional, hide at first
+	// 	var inital = newsletter.is(":checked");
+	// 	var topics = $("#newsletter_topics")[inital ? "removeClass" : "addClass"]("gray");
+	// 	var topicInputs = topics.find("input").attr("disabled", !inital);
+	// 	// show when newsletter is checked
+	// 	newsletter.click(function() {
+	// 		topics[this.checked ? "removeClass" : "addClass"]("gray");
+	// 		topicInputs.attr("disabled", !this.checked);
+	// 	});
+	// });
+	
 	
 }
