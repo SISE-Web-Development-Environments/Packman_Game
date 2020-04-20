@@ -9,13 +9,39 @@ var interval;
 
 
 
-var users = [
-	{
-		username:"p",
-		password:"p"
-	},
-]
 
+
+
+
+
+$("#Register").validate();
+
+function inline1(msg){
+	document.getElementById(msg).style.display="inline";
+	return false;
+}
+
+
+localStorage.setItem("p","p");
+
+
+
+
+function isValisdUserName(msg){
+	var username2=document.getElementById("user").value;
+	var password2= document.getElementById("pass").value;
+	if(localStorage.getItem==null){
+		return false;
+	}
+	if(localStorage.getItem("username2")=='password2'){
+		document.getElementById(msg).style.display="none";
+		return true;
+	}
+	else{
+		document.getElementById(msg).style.display="inline";
+		return false;
+	}
+}
 
 
 $(document).ready(function() {
@@ -24,25 +50,27 @@ $(document).ready(function() {
 });
 
 
-function isValidUserName(){
-	var username=document.getElementById("username1").value;
-	var password= document.getElementById("password1").value;
-	//var isExist =false;
-		for(i=0;i<users.length;i++){
-			if(username==users[i].username && password==users[i].password){
-				//document.getElementById(msg).style.display="none";
-				return true;
-				//isExist= true;
-			}
-			else{
-				//isExist= false;	
-				//window.alert("no good");
+// 	//var isExist =false;
+// 		// for(i=0;i<users.length;i++){
+// 		// 	if(username==users[i].username && password==users[i].password){
+// 				//document.getElementById(msg).style.display="none";
+// 				//return true;
+// 				//isExist= true;
+// 			//}
+// 			//else{
+// 				//isExist= false;	
+// 				//window.alert("no good");
 						
-				//document.getElementById(msg).style.display="inline";
-				return false;
-			}
-		}
-}
+// 				//document.getElementById(msg).style.display="inline";
+// 				//return false;
+// 			//}
+// 		//}
+// }
+
+
+
+
+
 
 function isValidPassWord(pass,msg){
 	let isValidPassWord;
@@ -119,6 +147,7 @@ function isValidPassWord(pass,msg){
 		}
 	}
 
+	
 
 function Start() {
 	board = new Array();
@@ -278,27 +307,11 @@ function UpdatePosition() {
 		Draw();
 	}
 	
+}
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// taday date for the 
-
-
-	let today = new Date().toISOString().substr(0, 10);
-	document.querySelector("#today").value = today;
-	document.querySelector("#today").valueAsDate = new Date();
+	// let today = new Date().toISOString().substr(0, 10);
+	// document.querySelector("#today").value = today;
+	// document.querySelector("#today").valueAsDate = new Date();
 
 
 
@@ -410,4 +423,4 @@ function UpdatePosition() {
 	// });
 	
 	
-}
+//}
