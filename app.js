@@ -10,44 +10,234 @@ var interval;
 
 
 
+var userAndPassArray=[["p","p"]]
 
-
-
-
-$("#Register").validate();
-
-function inline1(msg){
-	document.getElementById(msg).style.display="inline";
+function loginFunc(){
+	var userName = document.getElementById('login_username').value;
+	var passward = document.getElementById('login_password').value; 
+	for(i=0;i<userAndPassArray.length;i++){
+		if(userName===userAndPassArray[i][0] && passward===userAndPassArray[i][1]){
+			window.alert("confirm");
+			return true;
+		}
+	}
+	window.alert("wrong pass");
 	return false;
 }
 
 
-localStorage.setItem("p","p");
+
+// Access some stored data
+
+
+// function isValisdUserName(msg){
+// 	var username = $("#login_username").val();
+// 	var password= $("#login_password").val();
+// 	if(localStorage.getItem==null){
+// 		return false;
+// 	}
+// 	if(localStorage.getItem("username")=='password'){
+// 		document.getElementById(msg).style.display="none";
+// 		return true;
+// 	}
+// 	else{
+// 		document.getElementById(msg).style.display="inline";
+// 		return false;
+// 	}
+// }
+
+
+// $( "form" ).submit(function() {  
+// 	var username = $("#login_username").val();
+// 	var password= $("#login_password").val();
+// 	if ( localStorage.getItem("username") === 'password' ) {  
+// 	  $( "span" ).text( "Submitted Successfully." ).show();  
+// 	  return;  
+// 	}  
+// 	$( "span" ).text( "Not valid!" ).show().fadeOut( 2000 );  
+// 	event.preventDefault();  
+//   });  
 
 
 
+$( function() {
+    $( "#datepicker" ).datepicker();
+  } );
 
-function isValisdUserName(msg){
-	var username2=document.getElementById("user").value;
-	var password2= document.getElementById("pass").value;
-	if(localStorage.getItem==null){
-		return false;
+//   $(function() {
+// 	$("#passwordUser_error_message").hide();
+// 	var error_user = false;
+// 	var error_pass = false;
+	
+	
+	
+// 	$("#form_Username").focusout(function(){
+// 		check_login();
+// 	 });
+
+
+
+// 	 function check_login(){
+// 		var username = $("#login_username").val();
+// 		var password= $("#login_password").val();
+// 		if(localStorage.getItem==null){
+// 			return false;
+// 		}
+// 		if(localStorage.getItem("username")=='password'){
+// 			// document.getElementById(msg).style.display="none";
+// 			return true;
+// 		}
+// 		else{
+// 			// document.getElementById(msg).style.display="inline";
+// 			return false;
+// 		}
+// 	}
+//   });
+
+
+function checkIfExist(){
+	var userName = document.getElementById('form_username').value;
+	var passward = document.getElementById('form_password').value; 
+	for(i=0;i<userAndPassArray.length;i++){
+		if(userName===userAndPassArray[i][0] && passward===userAndPassArray[i][1]){
+			return true;
+		}
 	}
-	if(localStorage.getItem("username2")=='password2'){
-		document.getElementById(msg).style.display="none";
-		return true;
-	}
-	else{
-		document.getElementById(msg).style.display="inline";
-		return false;
-	}
+	return false;
 }
 
+function registerFunc(){
+	if("userName"===""||"passward"===""){
+		window.alert("register failed null");
+		return false;
+	}
+	if(!checkIfExist()){
+		userAndPassArray.push(["userName","passward"]);
+		window.alert("succses")
+		return true;
+	}
+	window.alert("register failed");
+	return false;
+}
 
-$(document).ready(function() {
-	context = canvas.getContext("2d");
-	Start();
-});
+$(function() {
+
+	$("#fname_error_message").hide();
+	$("#sname_error_message").hide();
+	$("#email_error_message").hide();
+	$("#password_error_message").hide();
+	$("#retype_password_error_message").hide();
+
+	var error_fname = false;
+	var error_sname = false;
+	var error_email = false;
+	var error_password = false;
+	var error_retype_password = false;
+
+	$("#form_Username").focusout(function(){
+		check_fname();
+	 });
+	 $("#form_password").focusout(function() {
+		check_password();
+	 });
+	$("#form_fname").focusout(function(){
+	   check_fname();
+	});
+	$("#form_lname").focusout(function() {
+	   check_sname();
+	});
+	$("#form_email").focusout(function() {
+	   check_email();
+	});
+	
+	function check_fname() {
+	   var pattern = /^[a-zA-Z]*$/;
+	   var fname = $("#form_fname").val();
+	   if (pattern.test(fname) && fname !== '' && fname.length>=2) {
+		  $("#fname_error_message").hide();
+		  $("#form_fname").css("border-bottom","2px solid #34F458");
+	   } else {
+		  $("#fname_error_message").html("insert only and more then 2 characters");
+		  $("#fname_error_message").show();
+		  $("#form_fname").css("border-bottom","2px solid #F90A0A");
+		  error_fname = true;
+	   }
+	}
+
+	function check_sname() {
+	   var pattern = /^[a-zA-Z]*$/;
+	   var sname = $("#form_sname").val()
+	   if (pattern.test(sname) && sname !== '' && sname.length>2) {
+		  $("#sname_error_message").hide();
+		  $("#form_sname").css("border-bottom","2px solid #34F458");
+	   } else {
+		  $("#sname_error_message").html("Should contain only Characters");
+		  $("#sname_error_message").show();
+		  $("#form_sname").css("border-bottom","2px solid #F90A0A");
+		  error_fname = true;
+	   }
+	}
+
+	function check_password() {
+	   var password_length = $("#form_password").val().length;
+	   var re = /(?=.*\d)(?=.*[a-zA-Z])/;
+	   
+	   if (password_length < 6 || !re.test($("#form_password").val())) {
+		  $("#password_error_message").html("Atleast 6 Characters");
+		  $("#password_error_message").show();
+		  $("#form_password").css("border-bottom","2px solid #F90A0A");
+		  error_password = true;
+	   } else {
+		  $("#password_error_message").hide();
+		  $("#form_password").css("border-bottom","2px solid #34F458");
+	   }
+	}
+
+	function check_email() {
+	   var pattern = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+	   var email = $("#form_email").val();
+	   if (pattern.test(email) && email !== '') {
+		  $("#email_error_message").hide();
+		  $("#form_email").css("border-bottom","2px solid #34F458");
+	   } else {
+		  $("#email_error_message").html("Invalid Email");
+		  $("#email_error_message").show();
+		  $("#form_email").css("border-bottom","2px solid #F90A0A");
+		  error_email = true;
+	   }
+	}
+
+	$("#registration_form").submit(function() {
+	   error_fname = false;
+	   error_sname = false;
+	   error_email = false;
+	   error_password = false;
+	   error_retype_password = false;
+
+	   check_fname();
+	   check_sname();
+	   check_email();
+	   check_password();
+	   check_retype_password();
+
+	   if (error_fname === false && error_sname === false && error_email === false && error_password === false && error_retype_password === false) {
+		alert("Registration Successfull");
+		  return true;
+	   } else {
+		  alert("Please Fill the form Correctly");
+		  return false;
+	   }
+	
+
+	});
+ });
+
+
+
+// $(document).ready(function() {
+// 	context = canvas.getContext("2d");
+// 	Start();
+// });
 
 
 // 	//var isExist =false;
@@ -72,80 +262,80 @@ $(document).ready(function() {
 
 
 
-function isValidPassWord(pass,msg){
-	let isValidPassWord;
-	if(pass.length<6){
-		isValidPassWord=false;
-	}
-	else if(pass.search(/[\!\@\#\$\%\^\&\*\(\)\_\+\,\.\?\\\'\`\~\{\}\[\]\|\-]/) != -1){
-		isValidPassWord=false;
-	}
-	else if(pass.search(/[^a-zA-Z0-9]/)!=-1){
-		isValidPassWord = false;
-	}
-	else{
-		isValidPassWord=true;
-	}
-	if(isValidPassWord==true){
-		document.getElementById(msg).style.display="none";
-	}
-	else{
-		document.getElementById(msg).style.display="inline";
-	}
-}
+// function isValidPassWord(pass,msg){
+// 	let isValidPassWord;
+// 	if(pass.length<6){
+// 		isValidPassWord=false;
+// 	}
+// 	else if(pass.search(/[\!\@\#\$\%\^\&\*\(\)\_\+\,\.\?\\\'\`\~\{\}\[\]\|\-]/) != -1){
+// 		isValidPassWord=false;
+// 	}
+// 	else if(pass.search(/[^a-zA-Z0-9]/)!=-1){
+// 		isValidPassWord = false;
+// 	}
+// 	else{
+// 		isValidPassWord=true;
+// 	}
+// 	if(isValidPassWord==true){
+// 		document.getElementById(msg).style.display="none";
+// 	}
+// 	else{
+// 		document.getElementById(msg).style.display="inline";
+// 	}
+// }
 	
 
 
-	function isValidFirstName(FName,msg){
-		let isValidFirstName;
-		let req= '/^[a-zA-Z]{2}$/';
-		if(!FName.match(req)){
-			isValidFirstName=false;
-		}
-		else{
-			isValidFirstName=true;
-		}
-		if(isValidFirstName==true){
-			document.getElementById(msg).style.display="none";
-		}
-		else{
-			document.getElementById(msg).style.display="inline";
-		}
-	}
+// 	function isValidFirstName(FName,msg){
+// 		let isValidFirstName;
+// 		let req= '/^[a-zA-Z]{2}$/';
+// 		if(!FName.match(req)){
+// 			isValidFirstName=false;
+// 		}
+// 		else{
+// 			isValidFirstName=true;
+// 		}
+// 		if(isValidFirstName==true){
+// 			document.getElementById(msg).style.display="none";
+// 		}
+// 		else{
+// 			document.getElementById(msg).style.display="inline";
+// 		}
+// 	}
 
-	function isValidLastName(LName ,msg){
-		let isValidLastName;
-		let req= '/^[a-zA-Z]{2}$/';
-		if(!LName.match(req)){
-			isValidLastName=false;
-		}
-		else{
-			isValidLastName=true;
-		}
-		if(isValidLastName==true){
-			document.getElementById(msg).style.display="none";
-		}
-		else{
-			document.getElementById(msg).style.display="inline";
-		}
-	}
+// 	function isValidLastName(LName ,msg){
+// 		let isValidLastName;
+// 		let req= '/^[a-zA-Z]{2}$/';
+// 		if(!LName.match(req)){
+// 			isValidLastName=false;
+// 		}
+// 		else{
+// 			isValidLastName=true;
+// 		}
+// 		if(isValidLastName==true){
+// 			document.getElementById(msg).style.display="none";
+// 		}
+// 		else{
+// 			document.getElementById(msg).style.display="inline";
+// 		}
+// 	}
 
-	function isValidEmail(Email,msg){
-		let isValidEmail;
-		let emailRegex = '^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$';
-		if(!emailRegex.search(Email)){
-			isValidEmail=false;
-		}
-		else{
-			isValidEmail=true;
-		}
-		if(isValidLastName==true){
-			document.getElementById(msg).style.display="none";
-		}
-		else{
-			document.getElementById(msg).style.display="inline";
-		}
-	}
+// 	function isValidEmail(Email,msg){
+// 		let isValidEmail;
+// 		let emailRegex = '^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$';
+// 		if(!emailRegex.search(Email)){
+// 			isValidEmail=false;
+// 		}
+// 		else{
+// 			isValidEmail=true;
+// 		}
+// 		if(isValidLastName==true){
+// 			document.getElementById(msg).style.display="none";
+// 		}
+// 		else{
+// 			document.getElementById(msg).style.display="inline";
+// 		}
+// 	}
 
 	
 

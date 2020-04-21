@@ -5,21 +5,19 @@
 
 	<script src="./jquery-3.4.1.slim.min.js"></script>
 	<link rel="stylesheet" href="./styleSheet.css">
-	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script>src = "http://code.jquery.com/jzuery-2.1.1.min.js"</script>
 	<script type="text/javascript" src="./app.js"></script>
 	<script type="text/javascript" src="./replaceWindow.js"></script>
-	<script>src = "js/jquery.validate.js"</script>
+	<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+	
+	<!-- datePicker -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="/resources/demos/style.css">
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-
-	<script>
-		$(function () {
-			$("#datepicker").datepicker();
-		});
-	</script>
+	<!-- <script src="../lib/jquery.js"></script>
+	<script src="https://jqueryvalidation.org/files/lib/jquery-1.11.1.js"></script>
+	<script src="../dist/jquery.validate.js"></script> -->
 
 </head>
 
@@ -36,58 +34,151 @@
 			<button id="RegisterButton" type="button" onclick="showRegister()" class="myButton"
 				style="width: 10%;">Register</button>
 		</div>
-
-
-
+		<br>
+		<br>
 	</section>
 
-	<section class='RegisterAndLogin' id="Register" class='section' style="display: none">
+
+<section id="RegisterSection">
+	<div class="container">
+		<h1>REGISTER</h1>
+		<form id="registration_form">
+			<div>
+				<input type="text" id="form_username" name="" required="">
+				<br>
+				<span class="error_form" id="retype_password_error_message"></span>
+				<br>
+				<label>userName</label>	
+			</div>
+			<div>
+			
+				<input type="text" id="form_fname" name="" required="">
+				<br>
+				<span class="error_form" id="fname_error_message" ></span>
+				<br>
+				<label>
+					First Name
+				</label>	
+			</div>
+			<div>
+				<input type="text" id="form_sname" name="" required="">
+				<br>
+				<span class="error_form" id="sname_error_message"></span>
+				<br>
+				<label>
+					Last Name
+				</label>	
+			</div>
+			<div>
+				<input type="email" id="form_email" name="" required="">
+				<br>
+				<span class="error_form" id="email_error_message"></span>
+				<br>
+				<label>Email</label>	
+			</div>
+			<div>
+				<input type="password" id="form_password" name="" required="">
+				<br>
+				<span class="error_form" id="password_error_message"></span>
+				<br>
+				<label>Password</label>	
+			</div>
+			<div>
+				<p><input id="datepicker" placeholder="BirthDate"  autocomplete="off"></p>
+				<br>
+				<span class="error_form" id="password_error_message"></span>
+				<!-- <label>BirthDate</label>	 -->
+			</div>
+			<button id="but11" class="but1" type="submit" value="Register"  name="" >
+			
+		</form>
+		
+	</div>
+	<br>
+	<br>
+</section>
+
+
+<section id="LoginSection">
+	<div class="container">
+		<h1>Login</h1>
+		<form id="registration_form" action="javascript:alert( 'success!' );">
+			<div>
+				<input type="text" id="login_username" name="" required="">
+				<label>userName</label>	
+			</div>
+			
+			<div>
+				<input type="password" id="login_password" name="" required="">
+				<label>Password</label>	
+			</div>
+			<br>
+				<span class="login_error" id="passwordUser_error_message"></span>
+			
+			<input class="but1" type="button" value="Login" onclick="loginFunc()" name="">
+			
+		</form>
+	</div>
+	<br>
+	<br>
+</section>
+
+
+
+
+
+
+
+
+	<!-- <section class='RegisterAndLogin' id="Register" class='section' style="display: none">
 		<div class="main-w3layouts wrapper">
 			<h1>Register</h1>
 			<div class="main-agileinfo">
 				<div class="agileits-top">
 					<form id="registerForm" action="#" method="post" autocomplete="on">
-						<input class="text" type="text" name="Username" placeholder="Username" required="" minlength="1"
-							aria-required="true">
+						<fieldset>
+						<input type="text" id="Username" name="Username" placeholder="userName">
 						<br>
 						<br>
 
 						<input class="text" id="password" type="password" name="password" placeholder="Password"
-							required="" required onchange="isValidPassWord(value,'wrongPassword');">
-						<label id="wrongPassword" style="display:none ; color: red;"> wrong Password</label>
+							required="" required onchange="isValidPassWord(value,'wrongPassword');"> -->
+	<!-- <label id="wrongPassword" style="display:none ; color: red;"> wrong Password</label>
 						<br>
 						<br>
 
 						<input class="text" type="text" id="FirstName" name="FirstName" placeholder="First Name"
 							required="" aria-required="true" required
-							onchange="isValidFirstName(value,'wrongFirstName');">
-						<label id="wrongFirstName" style="display:none ; color: red;"> wrong FirstName</label>
-						<br>
+							onchange="isValidFirstName(value,'wrongFirstName');"> -->
+	<!-- <label id="wrongFirstName" style="display:none ; color: red;"> wrong FirstName</label> -->
+	<!-- <br>
 						<br>
 
 						<input class="text" type="text" id="LastName" name="LastName" placeholder="Last Name"
 							required="" aria-required="true" required
-							onchange="isValidLastName(value,'wrongLastName');">
-						<label id="wrongLastName" style="display:none ; color: red;"> wrong LastName</label>
-						<br>
+							onchange="isValidLastName(value,'wrongLastName');"> -->
+	<!-- <label id="wrongLastName" style="display:none ; color: red;"> wrong LastName</label> -->
+	<!-- <br>
 						<br>
 
 						<input class="text" type="email" name="email" placeholder="Email" required=""
-							aria-required="true" required onchange="isValidEmail(value,'wrongEmail');">
-						<label id="wrongEmail" style="display:none ; color: red;"> wrong email</label>
-						<br>
+							aria-required="true" required onchange="isValidEmail(value,'wrongEmail');"> -->
+	<!-- <label id="wrongEmail" style="display:none ; color: red;"> wrong email</label> -->
+	<!-- <br>
 						<br>
 
-						<p> <input type="text" id="datepicker" class="hasDatepicker" placeholder="Birth Date"></p>
-						<!-- <input type="date" id="today" name="trip-start"  min="1910-01-01" max="today"> -->
-						<br>
+						<p> <input type="text" id="datepicker" class="hasDatepicker" placeholder="Birth Date"></p> -->
+	<!-- <input type="date" id="today" name="trip-start"  min="1910-01-01" max="today"> -->
+	<!-- <br>
 						<input id="submit" type="submit" value="SUBMIT" style="font-size:larger">
+					</fieldset>
 					</form>
 
 				</div>
 			</div>
 		</div>
-	</section>
+	
+	</section> -->
 
 
 
@@ -95,7 +186,7 @@
 
 
 
-	<section class='RegisterAndLogin' id="Login" class='section' style="display: none">
+	<!-- <section class='RegisterAndLogin' id="Login" class='section' style="display: none">
 		<div class="main-w3layouts wrapper">
 			<h1>Login</h1>
 			<div class="main-agileinfo">
@@ -114,7 +205,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 
 
 
