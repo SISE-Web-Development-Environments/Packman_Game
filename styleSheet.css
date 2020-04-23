@@ -38,13 +38,23 @@ input::placeholder {
   
 } */
 
+#RegisterSection{
 
+
+	height: 400px;
+	height: 400px;
+	margin: auto;
+}
+#LoginSection{
+	height: 400px;
+	height: 400px;
+	margin: auto;
+}
 body
 {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
-	background: url(college.png);
 	background-repeat: no-repeat;
 	background-size: cover;
 }

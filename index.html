@@ -11,7 +11,6 @@
 	
 	<!-- datePicker -->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<link rel="stylesheet" href="/resources/demos/style.css">
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -24,7 +23,7 @@
 
 
 <body>
-	<section id='Welcome' class='section'>
+	<div id='Welcome' class='section'>
 		<div class='logo' align='middle'>
 			<img src="./images/PacManLogo.png" style="width:30%">
 		</div>
@@ -36,32 +35,41 @@
 		</div>
 		<br>
 		<br>
-	</section>
+	</div>
 
 
-<section id="RegisterSection">
+
+
+
+
+	
+<div id="RegisterSection" style="display: none;">
 	<div class="container">
 		<h1>REGISTER</h1>
-		<form id="registration_form">
+		<form id="registration_form"  >
 			<div>
-				<input type="text" id="form_username" name="" required="">
+				<input type="text" id="form_username" name="" >
 				<br>
-				<span class="error_form" id="retype_password_error_message"></span>
+				<span class="error_form" id="userName_error_message"></span>
 				<br>
-				<label>userName</label>	
+				<label
+				>user Name
+				</label>	
 			</div>
+			<br>
 			<div>
-			
-				<input type="text" id="form_fname" name="" required="">
+				<input type="text" id="form_fname" name="">
 				<br>
 				<span class="error_form" id="fname_error_message" ></span>
 				<br>
 				<label>
 					First Name
-				</label>	
+				</label>
+					
 			</div>
+			<br>
 			<div>
-				<input type="text" id="form_sname" name="" required="">
+				<input type="text" id="form_sname" name="" >
 				<br>
 				<span class="error_form" id="sname_error_message"></span>
 				<br>
@@ -69,40 +77,45 @@
 					Last Name
 				</label>	
 			</div>
+			<br>
 			<div>
-				<input type="email" id="form_email" name="" required="">
+				<input type="email" id="form_email" name="" >
 				<br>
 				<span class="error_form" id="email_error_message"></span>
 				<br>
 				<label>Email</label>	
 			</div>
+			<br>
 			<div>
-				<input type="password" id="form_password" name="" required="">
+				<input type="password" id="form_password" name="" >
 				<br>
 				<span class="error_form" id="password_error_message"></span>
 				<br>
 				<label>Password</label>	
 			</div>
+			<br>
 			<div>
-				<p><input id="datepicker" placeholder="BirthDate"  autocomplete="off"></p>
+				<p><input type="text" name="" id="datepickerform" required="" value="dd/mm/yyyy" style="color: #0066ff;"  placeholder="BirthDate"  autocomplete="off"></p>
 				<br>
-				<span class="error_form" id="password_error_message"></span>
-				<!-- <label>BirthDate</label>	 -->
+				<span class="error_form" id="birthday_error_message"></span>
+				<br>
+			
 			</div>
-			<button id="but11" class="but1" type="submit" value="Register"  name="" >
+			<input type="submit" onclick="registerFunc();clearAllErrorMsg(); " value="Register"  name="" >
 			
 		</form>
 		
 	</div>
 	<br>
 	<br>
-</section>
+</div>
 
 
-<section id="LoginSection">
+
+<div id="LoginSection" style="display: none;">
 	<div class="container">
 		<h1>Login</h1>
-		<form id="registration_form" action="javascript:alert( 'success!' );">
+		<form id="Login_form" >
 			<div>
 				<input type="text" id="login_username" name="" required="">
 				<label>userName</label>	
@@ -115,13 +128,13 @@
 			<br>
 				<span class="login_error" id="passwordUser_error_message"></span>
 			
-			<input class="but1" type="button" value="Login" onclick="loginFunc()" name="">
+			<button type="button" class="but1"  value="Login"  onclick="loginFunc()" name="">
 			
 		</form>
 	</div>
 	<br>
 	<br>
-</section>
+</div>
 
 
 
