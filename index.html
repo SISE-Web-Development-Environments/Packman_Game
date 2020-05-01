@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<script src="./jquery-3.4.1.slim.min.js"></script>
+	<link rel="stylesheet" href="./styleSheet.css">
+	<script type="text/javascript" src="./app.js"></script>
+	<script type="text/javascript" src="./replaceWindow.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+	
+	<!-- datePicker -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<!-- <script src="../lib/jquery.js"></script>
+	<script src="https://jqueryvalidation.org/files/lib/jquery-1.11.1.js"></script>
+	<script src="../dist/jquery.validate.js"></script> -->
+
+</head>
+
+
+
+<body>
+	<div id='Welcome' class='section'>
+		<div class='logo' align='middle'>
+			<img src="./images/PacManLogo.png" style="width:30%">
+		</div>
+		<div id="buttons" class="section" align="middle">
+			<button id="LoginButton" type="button" onclick="showLogin()" class="myButton"
+				style="width: 10%;">Login</button>
+			<button id="RegisterButton" type="button" onclick="showRegister()" class="myButton"
+				style="width: 10%;">Register</button>
+		</div>
+		<br>
+		<br>
+	</div>
+
+
+
+
+
+
+	
+<div id="RegisterSection" style="display: none;">
+	<div class="container">
+		<h1>REGISTER</h1>
+		<form id="registration_form"  >
+			<div>
+				<input type="text" id="form_username" name="" >
+				<br>
+				<span class="error_form" id="userName_error_message"></span>
+				<br>
+				<label
+				>user Name
+				</label>	
+			</div>
+			<br>
+			<div>
+				<input type="text" id="form_fname" name="">
+				<br>
+				<span class="error_form" id="fname_error_message" ></span>
+				<br>
+				<label>
+					First Name
+				</label>
+					
+			</div>
+			<br>
+			<div>
+				<input type="text" id="form_sname" name="" >
+				<br>
+				<span class="error_form" id="sname_error_message"></span>
+				<br>
+				<label>
+					Last Name
+				</label>	
+			</div>
+			<br>
+			<div>
+				<input type="email" id="form_email" name="" >
+				<br>
+				<span class="error_form" id="email_error_message"></span>
+				<br>
+				<label>Email</label>	
+			</div>
+			<br>
+			<div>
+				<input type="password" id="form_password" name="" >
+				<br>
+				<span class="error_form" id="password_error_message"></span>
+				<br>
+				<label>Password</label>	
+			</div>
+			<br>
+			<div>
+				<p><input type="text" name="" id="datepickerform" required="" value="dd/mm/yyyy" style="color: #0066ff;"  placeholder="BirthDate"  autocomplete="off"></p>
+				<br>
+				<span class="error_form" id="birthday_error_message"></span>
+				<br>
+			
+			</div>
+			<input type="submit" onclick="registerFunc();clearAllErrorMsg(); " value="Register"  name="" >
+			
+		</form>
+		
+	</div>
+	<br>
+	<br>
+</div>
+
+
+
+<div id="LoginSection" style="display: none;">
+	<div class="container">
+		<h1>Login</h1>
+		<form id="Login_form" >
+			<div>
+				<input type="text" id="login_username" name="" required="">
+				<label>userName</label>	
+			</div>
+			
+			<div>
+				<input type="password" id="login_password" name="" required="">
+				<label>Password</label>	
+			</div>
+			<br>
+				<span class="login_error" id="passwordUser_error_message"></span>
+			
+			<button type="button" class="but1"  value="Login"  onclick="loginFunc()" name="">
+			
+		</form>
+	</div>
+	<br>
+	<br>
+</div>
+
+
+
+
+
+
+
+
+	<!-- <section class='RegisterAndLogin' id="Register" class='section' style="display: none">
+		<div class="main-w3layouts wrapper">
+			<h1>Register</h1>
+			<div class="main-agileinfo">
+				<div class="agileits-top">
+					<form id="registerForm" action="#" method="post" autocomplete="on">
+						<fieldset>
+						<input type="text" id="Username" name="Username" placeholder="userName">
+						<br>
+						<br>
+
+						<input class="text" id="password" type="password" name="password" placeholder="Password"
+							required="" required onchange="isValidPassWord(value,'wrongPassword');"> -->
+	<!-- <label id="wrongPassword" style="display:none ; color: red;"> wrong Password</label>
+						<br>
+						<br>
+
+						<input class="text" type="text" id="FirstName" name="FirstName" placeholder="First Name"
+							required="" aria-required="true" required
+							onchange="isValidFirstName(value,'wrongFirstName');"> -->
+	<!-- <label id="wrongFirstName" style="display:none ; color: red;"> wrong FirstName</label> -->
+	<!-- <br>
+						<br>
+
+						<input class="text" type="text" id="LastName" name="LastName" placeholder="Last Name"
+							required="" aria-required="true" required
+							onchange="isValidLastName(value,'wrongLastName');"> -->
+	<!-- <label id="wrongLastName" style="display:none ; color: red;"> wrong LastName</label> -->
+	<!-- <br>
+						<br>
+
+						<input class="text" type="email" name="email" placeholder="Email" required=""
+							aria-required="true" required onchange="isValidEmail(value,'wrongEmail');"> -->
+	<!-- <label id="wrongEmail" style="display:none ; color: red;"> wrong email</label> -->
+	<!-- <br>
+						<br>
+
+						<p> <input type="text" id="datepicker" class="hasDatepicker" placeholder="Birth Date"></p> -->
+	<!-- <input type="date" id="today" name="trip-start"  min="1910-01-01" max="today"> -->
+	<!-- <br>
+						<input id="submit" type="submit" value="SUBMIT" style="font-size:larger">
+					</fieldset>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	
+	</section> -->
+
+
+
+
+
+
+
+	<!-- <section class='RegisterAndLogin' id="Login" class='section' style="display: none">
+		<div class="main-w3layouts wrapper">
+			<h1>Login</h1>
+			<div class="main-agileinfo">
+				<div class="agileits-top">
+					<form id="loginForm" action="#" method="post" autocomplete="on">
+
+						<input class="text" type="text" name="Username" placeholder="Username" required="" id="user">
+						<br>
+						<input class="text" type="password" name="password" placeholder="Password" required=""
+							id="pass">
+
+						<input id="submit1" type="submit" value="SUBMIT" style="font-size: larger"
+							onsubmit="inline1('abc');">
+						<label id="abc" style="display:none ; color: red;"> wrong password</label>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section> -->
+
+
+
+
+
+
+
+	<section id='Settings' class='section' style="display: none">
+		<p>set up conterollers</p>
+	</section>
+
+
+
+
+
+	<section id='About' class='section' style="display: none">
+	</section>
+
+
+
+
+
+	<section id='GamePlay' class='section' style="display: none">
+		<div id="score">
+			<label for="lblScore">SCORE:</label>
+			<input id="lblScore" type="text" />
+		</div>
+		<div id="time">
+			<label for="lblTime">TIME:</label>
+			<input id="lblTime" type="text" />
+		</div>
+		<div id="game">
+			<canvas id="canvas" height="600" width="600"></canvas>
+		</div>
+	</section>
+
+
+
+</body>
+
+</html>
