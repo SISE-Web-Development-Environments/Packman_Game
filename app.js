@@ -19,6 +19,7 @@ var color25;
 var numOfColor5;
 var numOfColor15;
 var numOfColor25;
+
 var flagRandom = false;
 var timeLimit;
 var numManster;
@@ -35,7 +36,17 @@ var left = 37;
 
 
 
-
+function countBalls( num){
+	if(num===5){
+		return numOfColor5;
+	}
+	if(num===6){
+		return numOfColor15;
+	}
+	if(num===7){
+		return numOfColor25;
+	}
+}
 
 $(function () {
 
@@ -521,14 +532,14 @@ function Start() {
 	score = 0;
 	pac_color = "yellow";
 	//var cnt = 100;
-	var cnt = 14*19;
+	var cnt = 13*19;
 	// var food_remain = 50;
 	var pacman_remain = 1;
 	start_time = new Date();
 	for (var i = 0; i < 19; i++) {
 		board[i] = new Array();
 		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
-		for (var j = 0; j < 14; j++) {
+		for (var j = 0; j < 13; j++) {
 			if (
 				(i == 3 && j == 0) ||
 				(i == 15 && j == 0) ||
@@ -636,27 +647,87 @@ function Start() {
 				(i == 15 && j == 12))
 				 {
 				board[i][j] = 4;
-			} else {
+				//var rnd = getRandomInt(3)+5;//(5,6,7)
+			
+			}
+			 else {
+				
+
 				var randomNum = Math.random();
-				if (randomNum <= (1.35 * food_remain) / cnt) {
+				if (randomNum <= (1 * food_remain) / cnt) {
+
+					var rnd = Math.floor(Math.random() * 3 + 5);
+				while(countBalls(rnd)===0 && ( numOfColor5!==0 || numOfColor15!==0 || numOfColor25!==0)){
+					rnd =  Math.floor(Math.random() * 3 + 5);
+				}
 					food_remain--;
-					board[i][j] = 1;
-				} else if (randomNum < (1.35 * (pacman_remain + food_remain)) / cnt) {
+					board[i][j] = rnd;
+					if(rnd===5 ){
+						numOfColor5--;
+						food_remain--;
+					}
+					
+					else if(rnd===6 ){
+						numOfColor15--;
+						food_remain--;
+					}
+					
+				  	//if(rnd===7 ){
+				  else{
+						numOfColor25--;
+						food_remain--;
+					}
+					
+				} 
+				else if (randomNum < (1 * (pacman_remain + food_remain)) / cnt) {
 					shape.i = i;
 					shape.j = j;
 					pacman_remain--;
 					board[i][j] = 2;
-				} else {
+				} 
+				else {
 					board[i][j] = 0;
 				}
 				cnt--;
 			}
 		}
 	}
+
+	// if (typeof shape.i == "undefined") {
+    //     var emptyCell = findRandomEmptyCell(board);
+    //     shape.i = emptyCell[0];
+    //     shape.j = emptyCell[1];
+    //     board[emptyCell[0]][emptyCell[1]] = 2;
+    //     pacman_remain--;
+    // }
+
+
 	while (food_remain > 0) {
-		var emptyCell = findRandomEmptyCell(board);
-		board[emptyCell[0]][emptyCell[1]] = 1;
-		food_remain--;
+		 var emptyCell = findRandomEmptyCell(board);
+		// board[emptyCell[0]][emptyCell[1]] = 1;
+		// food_remain--;
+
+		var rnd = Math.floor(Math.random() * 3 + 5);
+		while(countBalls(rnd)===0 && ( numOfColor5!==0 || numOfColor15!==0 || numOfColor25!==0)){
+			rnd =  Math.floor(Math.random() * 3 + 5);
+		}
+			food_remain--;
+			board[emptyCell[0]][emptyCell[1]] = rnd;
+			if(rnd===5 ){
+				numOfColor5--;
+				food_remain--;
+			}
+			
+			else if(rnd===6 ){
+				numOfColor15--;
+				food_remain--;
+			}
+			
+			  //if(rnd===7 ){
+		  else{
+				numOfColor25--;
+				food_remain--;
+			}
 	}
 	keysDown = {};
 	addEventListener(
@@ -673,15 +744,15 @@ function Start() {
 		},
 		false
 	);
-	interval = setInterval(UpdatePosition, 250);
+	interval = setInterval(UpdatePosition, 100);
 }
 
 function findRandomEmptyCell(board) {
 	var i = Math.floor(Math.random() * 18 + 1);
-	var j = Math.floor(Math.random() * 13 + 1);
+	var j = Math.floor(Math.random() * 12 + 1);
 	while (board[i][j] != 0) {
 		i = Math.floor(Math.random() * 18 + 1);
-		j = Math.floor(Math.random() * 13 + 1);
+		j = Math.floor(Math.random() * 12 + 1);
 	}
 	return [i, j];
 }
@@ -767,7 +838,7 @@ function Draw() {
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
 	for (var i = 0; i < 19; i++) {
-		for (var j = 0; j < 14; j++) {
+		for (var j = 0; j < 13; j++) {
 			var center = new Object();
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
@@ -817,11 +888,23 @@ function Draw() {
 					context.fillStyle = "black"; //color
 					context.fill();
 				}
-				//black circle to eat
-			} else if (board[i][j] == 1) {
+				// circle to eat 5p
+			} else if (board[i][j] == 5) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
-				context.fillStyle = "black"; //color
+				context.fillStyle = color5; //color
+				context.fill();
+				// circle to eat 15p
+			} else if (board[i][j] == 6) {
+				context.beginPath();
+				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+				context.fillStyle = color15; //color
+				context.fill();
+				// circle to eat 25p
+			} else if (board[i][j] == 7) {
+				context.beginPath();
+				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+				context.fillStyle = color25; //color
 				context.fill();
 				//the wall
 			} else if (board[i][j] == 4) {
@@ -830,6 +913,7 @@ function Draw() {
 				context.fillStyle = "grey"; //color
 				context.fill();
 			}
+			
 			//need to add manster and pills.
 		}
 	}
@@ -848,7 +932,7 @@ function UpdatePosition() {
 
 	}
 	if (x == 2) {
-		if (shape.j < 9 && board[shape.i][shape.j + 1] != 4) {
+		if (shape.j < 12 && board[shape.i][shape.j + 1] != 4) {
 			shape.j++;
 		}
 		packmanDown = true;
@@ -863,7 +947,7 @@ function UpdatePosition() {
 
 	}
 	if (x == 4) {
-		if (shape.i < 9 && board[shape.i + 1][shape.j] != 4) {
+		if (shape.i < 18 && board[shape.i + 1][shape.j] != 4) {
 			shape.i++;
 		}
 		packmanRight = true;
