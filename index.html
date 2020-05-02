@@ -11,111 +11,147 @@
 	
 	<!-- datePicker -->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		 
+	<!-- dialog -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- dialog -->
 
-	<!-- <script src="../lib/jquery.js"></script>
-	<script src="https://jqueryvalidation.org/files/lib/jquery-1.11.1.js"></script>
-	<script src="../dist/jquery.validate.js"></script> -->
+
+<!------------ about dialog script ------------>
+<script>
+	$(document).ready( function() {
+$( "#WelcomeDialog" ).dialog({
+  autoOpen: false,
+  show: {
+	effect: "blind",
+	duration: 1000
+  },
+  hide: {
+	effect: "explode",
+	duration: 1000
+  }
+});
+
+$( "#AboutButton" ).on( "click", function() {
+  $( "#WelcomeDialog" ).dialog( "open" );
+});
+} );
+</script>
+<!------------ about dialog script ------------>
 
 </head>
 
 
 
 <body>
-	<div id='Welcome' class='section'>
-		<div class='logo' align='middle'>
+	<section id='Welcome' class='section'>
+		<div class='logo' style="text-align:center">
 			<img src="./images/PacManLogo.png" style="width:30%">
 		</div>
-		<div id="buttons" class="section" align="middle">
+		<div id="buttons" class="section" style="text-align:center">
 			<button id="LoginButton" type="button" onclick="showLogin()" class="myButton"
 				style="width: 10%;">Login</button>
 			<button id="RegisterButton" type="button" onclick="showRegister()" class="myButton"
 				style="width: 10%;">Register</button>
+
+				<button id="SetButton" type="button" onclick="showSetting()" class="myButton"
+				style="width: 10%;">Setting</button>
+
+				<button id="gameButton" type="button" onclick="showGame()" class="myButton"
+				style="width: 10%;">game</button>
+				<button id="AboutButton" type="button" onclick="showAbout()" class="myButton"
+				style="width: 10%;">About</button>
 		</div>
 		<br>
 		<br>
-	</div>
+	</section>
+
+	<section>
+		<div id="WelcomeDialog"  style="display: none;">
+				<p>
+					<bigger> this is a packman game by yzhar and dean.</bigger>
+				</p>
+		</div>
+	</section>
 
 
-
-
-
-
-	
-<div id="RegisterSection" style="display: none;">
+<section id="RegisterSection" style="display: none;" >
 	<div class="container">
 		<h1>REGISTER</h1>
-		<form id="registration_form"  >
+		<form id="registration_form" onsubmit="allfill()" >
 			<div>
 				<input type="text" id="form_username" name="" >
 				<br>
 				<span class="error_form" id="userName_error_message"></span>
 				<br>
+				<br>
 				<label
 				>user Name
 				</label>	
 			</div>
-			<br>
 			<div>
-				<input type="text" id="form_fname" name="">
+			
+				<input type="text" id="form_fname" name="" >
 				<br>
 				<span class="error_form" id="fname_error_message" ></span>
-				<br>
+				
 				<label>
 					First Name
-				</label>
-					
+				</label>	
 			</div>
-			<br>
 			<div>
-				<input type="text" id="form_sname" name="" >
+				<input type="text" id="form_sname" name="" style="height: 2px;" >
 				<br>
 				<span class="error_form" id="sname_error_message"></span>
+				<br>
 				<br>
 				<label>
 					Last Name
 				</label>	
 			</div>
-			<br>
 			<div>
-				<input type="email" id="form_email" name="" >
+				<input type="email" id="form_email" name=""  >
 				<br>
 				<span class="error_form" id="email_error_message"></span>
 				<br>
+				<br>
 				<label>Email</label>	
 			</div>
-			<br>
 			<div>
 				<input type="password" id="form_password" name="" >
 				<br>
 				<span class="error_form" id="password_error_message"></span>
 				<br>
+				<br>
 				<label>Password</label>	
 			</div>
-			<br>
 			<div>
-				<p><input type="text" name="" id="datepickerform" required="" value="dd/mm/yyyy" style="color: #0066ff;"  placeholder="BirthDate"  autocomplete="off"></p>
+				<p><input type="text" name="" id="datepickerform" placeholder="BirthDate"   autocomplete="off"></p>
 				<br>
 				<span class="error_form" id="birthday_error_message"></span>
 				<br>
-			
+				<br>
 			</div>
-			<input type="submit" onclick="registerFunc();clearAllErrorMsg(); " value="Register"  name="" >
+			<input id="but11" class="but1" type="submit" onsubmit="registerFunc()" value="Register"  name="" >
 			
 		</form>
 		
 	</div>
 	<br>
 	<br>
-</div>
+</section>
 
 
-
-<div id="LoginSection" style="display: none;">
+<section id="LoginSection" style="display: none;">
 	<div class="container">
 		<h1>Login</h1>
-		<form id="Login_form" >
+		<form id="login_form"  action="javascript:alert( 'success!' );">
 			<div>
 				<input type="text" id="login_username" name="" required="">
 				<label>userName</label>	
@@ -134,114 +170,110 @@
 	</div>
 	<br>
 	<br>
-</div>
+</section>
 
 
 
 
-
-
-
-
-	<!-- <section class='RegisterAndLogin' id="Register" class='section' style="display: none">
-		<div class="main-w3layouts wrapper">
-			<h1>Register</h1>
-			<div class="main-agileinfo">
-				<div class="agileits-top">
-					<form id="registerForm" action="#" method="post" autocomplete="on">
-						<fieldset>
-						<input type="text" id="Username" name="Username" placeholder="userName">
-						<br>
-						<br>
-
-						<input class="text" id="password" type="password" name="password" placeholder="Password"
-							required="" required onchange="isValidPassWord(value,'wrongPassword');"> -->
-	<!-- <label id="wrongPassword" style="display:none ; color: red;"> wrong Password</label>
-						<br>
-						<br>
-
-						<input class="text" type="text" id="FirstName" name="FirstName" placeholder="First Name"
-							required="" aria-required="true" required
-							onchange="isValidFirstName(value,'wrongFirstName');"> -->
-	<!-- <label id="wrongFirstName" style="display:none ; color: red;"> wrong FirstName</label> -->
-	<!-- <br>
-						<br>
-
-						<input class="text" type="text" id="LastName" name="LastName" placeholder="Last Name"
-							required="" aria-required="true" required
-							onchange="isValidLastName(value,'wrongLastName');"> -->
-	<!-- <label id="wrongLastName" style="display:none ; color: red;"> wrong LastName</label> -->
-	<!-- <br>
-						<br>
-
-						<input class="text" type="email" name="email" placeholder="Email" required=""
-							aria-required="true" required onchange="isValidEmail(value,'wrongEmail');"> -->
-	<!-- <label id="wrongEmail" style="display:none ; color: red;"> wrong email</label> -->
-	<!-- <br>
-						<br>
-
-						<p> <input type="text" id="datepicker" class="hasDatepicker" placeholder="Birth Date"></p> -->
-	<!-- <input type="date" id="today" name="trip-start"  min="1910-01-01" max="today"> -->
-	<!-- <br>
-						<input id="submit" type="submit" value="SUBMIT" style="font-size:larger">
-					</fieldset>
-					</form>
-
+	<section id='SettingsSection' class='section' style="display: none">
+		
+		<div class="container">
+			<h1>set up conterollers</h1>
+			
+			<form action="" id="formControlers"  method="post">
+				<div>
+					
+					<input id = "upKey" type="text" maxlength="1" minlength="1" required><br>
+					<br>
+				<!-- <span class="error_form" id="upKey_error_message"></span> -->
+					<br>
+					<label>Choose up key:</label>
+						
 				</div>
-			</div>
-		</div>
-	
-	</section> -->
-
-
-
-
-
-
-
-	<!-- <section class='RegisterAndLogin' id="Login" class='section' style="display: none">
-		<div class="main-w3layouts wrapper">
-			<h1>Login</h1>
-			<div class="main-agileinfo">
-				<div class="agileits-top">
-					<form id="loginForm" action="#" method="post" autocomplete="on">
-
-						<input class="text" type="text" name="Username" placeholder="Username" required="" id="user">
-						<br>
-						<input class="text" type="password" name="password" placeholder="Password" required=""
-							id="pass">
-
-						<input id="submit1" type="submit" value="SUBMIT" style="font-size: larger"
-							onsubmit="inline1('abc');">
-						<label id="abc" style="display:none ; color: red;"> wrong password</label>
-					</form>
+				<div>
+				
+					
+					<input id= "downKey" type="text" maxlength="1" minlength="1" required><br>
+					<label>Choose down key:</label>
+					<!-- <span class="error_form" id="downKey_error_message"></span> -->
+					<br>
+					
 				</div>
-			</div>
+				<div>
+					
+					<input id= "rightKey" type="text" maxlength="1" minlength="1" required><br>
+					<label>Choose right key:</label>
+					<!-- <span class="error_form" id="rightKey_error_message"></span> -->
+					<br>
+					
+				</div>
+				<div>
+					
+					<input id= "leftKey" type="text" maxlength="1" minlength="1" required><br>
+					<span class="error_form" id="keys_error_message"></span>
+					<br>
+					
+					<label>Choose left key:</label>
+				</div>
+				<div>
+					
+					<input id="numOfBalls" type="number" min="50" max="90" required><br>
+					<span class="error_form" id="numOfBalls_error_message"></span>
+					<br>
+					
+					<label>Choose number of balls(between 50-90):</label>
+				</div>
+				<div>
+					
+					<input type="color" id="color5p"   required><br>
+					<label>Choose 5 point balls:</label>
+				</div>
+				<div>
+					
+					<input type="color" id="color15p" required ><br>
+					<label>Choose 15 point balls:</label>
+				</div>
+				<div>
+					
+					<input type="color" id="color25p"  required><br>
+					
+					<label>Choose 25 point balls:</label>
+				</div>
+				<span class="error_form" id="colors_error_message"></span>
+					<br>		
+				<div>
+					
+					<input id="timeOfGame" type="number" min="60"  required><br>	
+					<span class="error_form" id="timeOfGame_error_message"></span>
+					<br>
+					
+					<label>set time:</label>
+				</div>
+				<div>
+					
+					<input id="numberOfMansters" type="number" min="1" max="4" required><br> 
+					<span class="error_form" id="numberOfMansters_error_message"></span>
+					<br>
+					<br>
+					<label>set numer of mansters(between 1-4):</label>
+				</div>
+				<input type="button" id="randomButton" class="but1"  value="random"  onclick="randomSetting()" name="">
+						<input type="button" id="submitButton"  class="but1"  value="submit" onclick="submitSetting()"   name="">
+					<br>
+			</form>
+			
 		</div>
-	</section> -->
+		<br>
 
-
-
-
-
-
-
-	<section id='Settings' class='section' style="display: none">
-		<p>set up conterollers</p>
+			
 	</section>
-
-
-
 
 
 	<section id='About' class='section' style="display: none">
 	</section>
 
 
-
-
-
-	<section id='GamePlay' class='section' style="display: none">
+	<section id='GamePlaySection' class='section' style="display: none;" >
 		<div id="score">
 			<label for="lblScore">SCORE:</label>
 			<input id="lblScore" type="text" />
@@ -251,11 +283,9 @@
 			<input id="lblTime" type="text" />
 		</div>
 		<div id="game">
-			<canvas id="canvas" height="600" width="600"></canvas>
+			<canvas id="canvas" height="900" width="1140"></canvas>
 		</div>
 	</section>
-
-
 
 </body>
 

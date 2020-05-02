@@ -1,4 +1,22 @@
 
+#divControlers{
+	width: 400px;
+	height: 800px;
+	margin: auto;
+	border: 3px solid green;
+	padding: 30px;
+}
+#canvas{
+	border:3px solid black;
+	margin: 15px;
+	position: absolute;
+    top: 150%;
+    left: 50%;
+    transform: translate(-60%, -60%);  
+
+
+}
+
 /* style for buttons */
 .myButton {
 	box-shadow: 3px 4px 0px 0px #8a2a21;
@@ -38,23 +56,13 @@ input::placeholder {
   
 } */
 
-#RegisterSection{
 
-
-	height: 400px;
-	height: 400px;
-	margin: auto;
-}
-#LoginSection{
-	height: 400px;
-	height: 400px;
-	margin: auto;
-}
 body
 {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
+	/* background: url(college.png); */
 	background-repeat: no-repeat;
 	background-size: cover;
 }
@@ -139,6 +147,7 @@ body
 }
 .error_form
 {
+	padding-bottom: 30px;
 	top: 12px;
 	color: rgb(216, 15, 15);
     font-size: 15px;
