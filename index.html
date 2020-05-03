@@ -148,7 +148,7 @@ $( "#AboutButton" ).on( "click", function() {
 </section>
 
 
-<section id="LoginSection" style="display: none;">
+<section id="LoginSection" style="display: none">
 	<div class="container">
 		<h1>Login</h1>
 		<form id="login_form"  action="javascript:alert( 'success!' );">
@@ -164,8 +164,8 @@ $( "#AboutButton" ).on( "click", function() {
 			<br>
 				<span class="login_error" id="passwordUser_error_message"></span>
 			
-			<button type="button" class="but1"  value="Login"  onclick="loginFunc()" name="">
-			
+			<button type="button" id = "LoginFormButton" class="but1"  value="Login"  onclick="loginFunc()" name="">
+				
 		</form>
 	</div>
 	<br>
@@ -183,7 +183,7 @@ $( "#AboutButton" ).on( "click", function() {
 			<form action="" id="formControlers"  method="post">
 				<div>
 					
-					<input id = "upKey" type="text" maxlength="1" minlength="1" required><br>
+					<input id = "upKey" type="text" maxlength="1" minlength="1" required=""><br>
 					<br>
 				<!-- <span class="error_form" id="upKey_error_message"></span> -->
 					<br>
@@ -193,7 +193,7 @@ $( "#AboutButton" ).on( "click", function() {
 				<div>
 				
 					
-					<input id= "downKey" type="text" maxlength="1" minlength="1" required><br>
+					<input id= "downKey" type="text" maxlength="1" minlength="1" required=""><br>
 					<label>Choose down key:</label>
 					<!-- <span class="error_form" id="downKey_error_message"></span> -->
 					<br>
@@ -201,7 +201,7 @@ $( "#AboutButton" ).on( "click", function() {
 				</div>
 				<div>
 					
-					<input id= "rightKey" type="text" maxlength="1" minlength="1" required><br>
+					<input id= "rightKey" type="text" maxlength="1" minlength="1" required=""><br>
 					<label>Choose right key:</label>
 					<!-- <span class="error_form" id="rightKey_error_message"></span> -->
 					<br>
@@ -209,7 +209,7 @@ $( "#AboutButton" ).on( "click", function() {
 				</div>
 				<div>
 					
-					<input id= "leftKey" type="text" maxlength="1" minlength="1" required><br>
+					<input id= "leftKey" type="text" maxlength="1" minlength="1" required=""><br>
 					<span class="error_form" id="keys_error_message"></span>
 					<br>
 					
@@ -217,7 +217,7 @@ $( "#AboutButton" ).on( "click", function() {
 				</div>
 				<div>
 					
-					<input id="numOfBalls" type="number" min="50" max="90" required><br>
+					<input id="numOfBalls" type="number" min="50" max="90" required=""><br>
 					<span class="error_form" id="numOfBalls_error_message"></span>
 					<br>
 					
@@ -225,17 +225,17 @@ $( "#AboutButton" ).on( "click", function() {
 				</div>
 				<div>
 					
-					<input type="color" id="color5p"   required><br>
+					<input type="color" id="color5p"   required=""><br>
 					<label>Choose 5 point balls:</label>
 				</div>
 				<div>
 					
-					<input type="color" id="color15p" required ><br>
+					<input type="color" id="color15p" required =""><br>
 					<label>Choose 15 point balls:</label>
 				</div>
 				<div>
 					
-					<input type="color" id="color25p"  required><br>
+					<input type="color" id="color25p"  required=""><br>
 					
 					<label>Choose 25 point balls:</label>
 				</div>
@@ -243,7 +243,7 @@ $( "#AboutButton" ).on( "click", function() {
 					<br>		
 				<div>
 					
-					<input id="timeOfGame" type="number" min="60"  required><br>	
+					<input id="timeOfGame" type="number" min="60"  required=""><br>	
 					<span class="error_form" id="timeOfGame_error_message"></span>
 					<br>
 					
@@ -251,15 +251,16 @@ $( "#AboutButton" ).on( "click", function() {
 				</div>
 				<div>
 					
-					<input id="numberOfMansters" type="number" min="1" max="4" required><br> 
+					<input id="numberOfMansters" type="number" min="1" max="4" required=""><br> 
 					<span class="error_form" id="numberOfMansters_error_message"></span>
 					<br>
 					<br>
 					<label>set numer of mansters(between 1-4):</label>
 				</div>
 				<input type="button" id="randomButton" class="but1"  value="random"  onclick="randomSetting()" name="">
-						<input type="button" id="submitButton"  class="but1"  value="submit" onclick="submitSetting()"   name="">
-					<br>
+						<input type="button" id="submitButton"  class="but1"  value="submit"   name="" onclick="submitSetting()" >
+						
+						<br>
 			</form>
 			
 		</div>
