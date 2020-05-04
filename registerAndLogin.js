@@ -13,7 +13,7 @@ var numOfColor25;
 
 var flagRandom = false;
 var timeLimit;
-var numManster;
+
 
 
 //double code----------------------------------------------------------

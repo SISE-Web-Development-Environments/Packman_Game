@@ -1,5 +1,5 @@
 
-
+var numManster;
 
 function submitSetting() {
 
