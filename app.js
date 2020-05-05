@@ -9,9 +9,9 @@ var start_time;
 var time_elapsed;
 var interval;
 var interval1;
+var packLife=3;
 
-
-
+var foodValue= [0,0,0,0];
 var food_remain;
 var userKeys = {
 	left: 37,
@@ -19,7 +19,11 @@ var userKeys = {
 	right: 39,
 	down: 40
 };
-var ghost = new Object();//board[i][j]==3
+var ghosts= [new Object(),new Object(),new Object(),new Object()];
+// var ghost1 = new Object();//board[i][j]==8
+// var ghost2 = new Object();//board[i][j]==9
+// var ghost3 = new Object();//board[i][j]==10
+// var ghost4 = new Object();//board[i][j]==11
 //where packman face tend to. 
 var packmanLeft = false;
 var packmanRight = true;
@@ -139,6 +143,7 @@ function Draw() {
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
 			if (board[i][j] == 8) {
+				
 				drewGhost('red', center.x, center.y);
 			}
 			if (board[i][j] == 9) {
@@ -221,13 +226,13 @@ function Draw() {
 				context.fillStyle = "grey"; //color
 				context.fill();
 			}
-
-			//need to add manster and pills.
 		}
 	}
 }
+//board[i][j] != 8 &&board[i][j] != 9 &&board[i][j] != 10 &&board[i][j] != 11
 function isValidMoveForGhost(i, j) {
-	if (board[i][j] != 4 && j >= 0 && j <= 12 && i >= 0 && i <= 18) {
+	if (board[i][j] != 4 &&  
+		 j >= 0 && j <= 12 && i >= 0 && i <= 18) {
 		return true;
 	}
 	else {
@@ -235,136 +240,237 @@ function isValidMoveForGhost(i, j) {
 	}
 }
 
+function ghostMoveLeft(ghostX) {
+	ghostX.i--;
+}
+function ghostMoveRight(ghostX) {
+	ghostX.i++;
+}
+function ghostMoveUp(ghostX) {
+	ghostX.j--;
+}
+function ghostMoveDown(ghostX) {
+	ghostX.j++;
+}
 
-function ghostMoveLeft() {
-	ghost.j--;
+function kindOfFood(i,j){
+	if(board[i][j]==5 || board[i][j]==6 || board[i][j]==7){
+			return board[i][j];
+	}
+	return 0;
 }
-function ghostMoveRight() {
-	ghost.j++;
-}
-function ghostMoveUp() {
-	ghost.i--;
-}
-function ghostMoveDown() {
-	ghost.i++;
-}
-
-
 
 function UpdateGhostPosition() {
-	board[ghost.i][ghost.j] = 0;
-	if (shape.i < ghost.i) {//check if pac is up
-		if (isValidMoveForGhost(ghost.i - 1, ghost.j)) {// is up valid?
-			ghostMoveUp();
+
+	for(var t=0;t<numManster;t++){
+	board[ghosts[t].i][ghosts[t].j] = foodValue[t];
+	////up
+	if (shape.j < ghosts[t].j) {//check if pac is up
+		if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {// is up valid?
+			foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j - 1);
+			//if(foodValue==0){
+			ghostMoveUp(ghosts[t]);
+			// }
+			// else{
+			// 	continue;
+			// }
 		}
 		else {//up not valid
-			if (shape.j < ghost.j) {//check if pac is left
-				if (isValidMoveForGhost(ghost.i, ghost.j - 1)) {//is ledt valid?
-					ghostMoveLeft();
+			if (shape.i > ghosts[t].i) {//check if pac is right
+				if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//is right valid?
+					foodValue[t]=kindOfFood(ghosts[t].i+1, ghosts[t].j);
+					//	if(foodValue==0){
+					ghostMoveRight(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }
+				}
+
+				else {//right not valid
+					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {//check if down is valid
+						foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
+						//if(foodValue==0){
+							ghostMoveDown(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+					}
+					else {
+						
+						foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
+						//if(foodValue==0){
+							ghostMoveLeft(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+					}
+				}
+			}		
+		}
+	}
+
+	//try packman is right
+	else if (shape.i > ghosts[t].i) {
+		if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {
+			foodValue[t]=kindOfFood(ghosts[t].i+1, ghosts[t].j);
+					//	if(foodValue==0){
+							ghostMoveRight(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+			
+		}
+		else {//right move is not valid
+			if (isValidMoveForGhost(ghosts[t].i , ghosts[t].j + 1)) {
+				foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
+					//	if(foodValue==0){
+							ghostMoveDown(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+				
+			}
+			else {//down move is not valid
+				if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {
+					foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
+					//	if(foodValue==0){
+							ghostMoveLeft(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+				
+				
+				}
+				else {//left move is not valid
+					
+
+					foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
+					//	if(foodValue==0){
+							ghostMoveUp(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+				
+				}
+			}
+		}
+	}
+	//pac is down
+
+	else if (shape.j > ghosts[t].j) { // check pacman is down
+		if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {// is down valid?
+			
+
+			foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
+					//	if(foodValue==0){
+							ghostMoveDown(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+				
+		}
+		else {//down not valid
+			if (shape.i < ghosts[t].i) {//check if pac is left
+				if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//is left valid?
+					foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
+					//	if(foodValue==0){
+							ghostMoveLeft(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }	
+				
+					
 				}
 				else {//left not valid
-					if (isValidMoveForGhost(i + 1, j)) {//check if down is valid
-						ghostMoveDown();
+					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
+						foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j-1);
+					//	if(foodValue==0){
+							ghostMoveUp(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }
+						
 					}
 					else {
-						ghostMoveRight();
+						
+						foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j-1);
+						//if(foodValue==0){
+							ghostMoveRight(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }
 					}
 				}
-			}
-			else {
-				if (isValidMoveForGhost(i, j + 1)) {//check if right is valid
-					ghostMoveRight();
-				}
-				else {
-					if (isValidMoveForGhost(i + 1, j)) {//check if down is valid
-						ghostMoveDown();
-					}
-					else {
-						ghostMoveLeft();
-					}
-				}
-
 			}
 		}
 	}
-	else { // pacman not up
-		if (shape.i > ghost.i) { // check pacman is down
-			if (isValidMoveForGhost(ghost.i + 1, ghost.j)) {// is down valid?
-				ghostMoveDown();
-			}
-			else {//down not valid
-				if (shape.j < ghost.j) {//check if pac is left
-					if (isValidMoveForGhost(ghost.i, ghost.j - 1)) {//is ledt valid?
-						ghostMoveLeft();
-					}
-					else {//left not valid
-						if (isValidMoveForGhost(i, j + 1)) {//check if right is valid
-							ghostMoveRight();
-						}
-						else {
-							ghostMoveUp();
-						}
-					}
-				}
-				else {
-					if (isValidMoveForGhost(i, j + 1)) {//check if right is valid
-						ghostMoveRight();
-					}
-					else {
-						if (isValidMoveForGhost(i, j - 1)) {//check if left is valid
-							ghostMoveLeft();
-						}
-						else {
-							ghostMoveUp();
-						}
-					}
-				}
-
-			}
+	//ppack is left
+	else {
+		if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//check if left is valid
+			foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
+						//if(foodValue==0){
+							ghostMoveLeft(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }
+			
 		}
 		else {
-			if (shape.j < ghost.j) {//pac is in the left
-				if (isValidMoveForGhost(i, j - 1)) {
-					ghostMoveLeft();
-				}
-				else {
-					if (isValidMoveForGhost(i + 1, j)) {
-						ghostMoveDown();
-					}
-					else {
-						if (isValidMoveForGhost(i - 1, j)) {
-							ghostMoveUp();
-						}
-						else {
-							ghostMoveRight();
-						}
-					}
-				}
+			if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
+				
+				foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j-1);
+					//	if(foodValue==0){
+							ghostMoveUp(ghosts[t]);
+
+						// }
+						// else{
+						// 	continue;
+						// }
+			
 			}
-			else {//pac is in the right
-				if (isValidMoveForGhost(i, j + 1)) {
-					ghostMoveRight();
+			else {
+				if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//check if right move is valid
+					foodValue[t]=kindOfFood(ghosts[t].i+1, ghosts[t].j);
+					//	if(foodValue==0){
+							ghostMoveRight(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }
+					
 				}
 				else {
-					if (isValidMoveForGhost(i + 1, j)) {
-						ghostMoveDown();
-					}
-					else {
-						if (isValidMoveForGhost(i - 1, j)) {
-							ghostMoveUp();
-						}
-						else {
-							ghostMoveLeft();
-						}
-					}
+				
+
+					foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
+					//	if(foodValue==0){
+							ghostMoveDown(ghosts[t]);
+						// }
+						// else{
+						// 	continue;
+						// }
 				}
 			}
 		}
 	}
-	board[ghost.i][ghost.j] = 8;
+
+	board[ghosts[t].i][ghosts[t].j] = t+8;
 	Draw();
 }
 
+}
 
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
@@ -402,15 +508,46 @@ function UpdatePosition() {
 	if (board[shape.i][shape.j] == 7) {
 		score = score + 25;
 	}
+
+	if (board[shape.i][shape.j] == 8) {
+		packLife--;
+		
+	}
+	if (board[shape.i][shape.j] == 9) {
+		packLife--;
+		
+			
+	}
+	if (board[shape.i][shape.j] == 10) {
+		packLife--;
+		
+			
+	}
+	if (board[shape.i][shape.j] == 11) {
+		packLife--;
+				
+	}
+
+	if(packLife==0){
+		window.alert("Game over");
+		packLife=3;
+		showSetting();
+		}
+		
+
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
 	if (score >= 20 && time_elapsed <= 10) {
 		pac_color = "green";
 	}
-	if (score >= 50) {
-		window.clearInterval(interval);
+	
+	if (score >= 500) {
 		window.alert("Game completed");
+		window.clearInterval(interval);
+		
+		score=0;
+		showSetting();
 	} else {
 		Draw();
 
@@ -441,13 +578,19 @@ function Start() {
 	start_time = new Date();
 	numManster = parseInt(numManster);
 
+		//(i == 3 && j == 0) ||
+			//	(i == 15 && j == 0) ||
+			//	(i == 0 && j == 3) ||
+				//(i == 18 && j == 3) ||
+				//(i == 18 && j == 9) ||
+				// (i == 3 && j == 12) ||
+				// (i == 15 && j == 12)) 
+				// (i == 0 && j == 9) ||
 	for (var i = 0; i < 19; i++) {
 		board[i] = new Array();
 		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
 		for (var j = 0; j < 13; j++) {
 			if (
-				(i == 3 && j == 0) ||
-				(i == 15 && j == 0) ||
 				(i == 1 && j == 1) ||
 				(i == 3 && j == 1) ||
 				(i == 5 && j == 1) ||
@@ -464,7 +607,6 @@ function Start() {
 				(i == 9 && j == 2) ||
 				(i == 13 && j == 2) ||
 				(i == 17 && j == 2) ||
-				(i == 0 && j == 3) ||
 				(i == 1 && j == 3) ||
 				(i == 3 && j == 3) ||
 				(i == 4 && j == 3) ||
@@ -478,7 +620,6 @@ function Start() {
 				(i == 14 && j == 3) ||
 				(i == 15 && j == 3) ||
 				(i == 17 && j == 3) ||
-				(i == 18 && j == 3) ||
 				(i == 1 && j == 4) ||
 				(i == 5 && j == 4) ||
 				(i == 13 && j == 4) ||
@@ -512,7 +653,6 @@ function Start() {
 				(i == 5 && j == 8) ||
 				(i == 13 && j == 8) ||
 				(i == 17 && j == 8) ||
-				(i == 0 && j == 9) ||
 				(i == 1 && j == 9) ||
 				(i == 3 && j == 9) ||
 				(i == 4 && j == 9) ||
@@ -526,7 +666,6 @@ function Start() {
 				(i == 14 && j == 9) ||
 				(i == 15 && j == 9) ||
 				(i == 17 && j == 9) ||
-				(i == 18 && j == 9) ||
 				(i == 1 && j == 10) ||
 				(i == 5 && j == 10) ||
 				(i == 9 && j == 10) ||
@@ -542,68 +681,66 @@ function Start() {
 				(i == 11 && j == 11) ||
 				(i == 13 && j == 11) ||
 				(i == 15 && j == 11) ||
-				(i == 17 && j == 11) ||
-				(i == 3 && j == 12) ||
-				(i == 15 && j == 12)) {
+				(i == 17 && j == 11)) {
 				board[i][j] = 4;
 			}
 			else {
 				if ((i == 0 && j == 0) || (i == 18 && j == 0) || (i == 18 && j == 12) || (i == 0 && j == 12)) {
 					if (numManster == 1) {
 						if (i == 0 && j == 0) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[0].i = i;
+							ghosts[0].j = j;
 							board[i][j] = 8;
 						}
 					}
 					if (numManster == 2) {
 						if (i == 0 && j == 0) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[0].i = i;
+							ghosts[0].j = j;
 							board[i][j] = 8;
 						}
 						if (i == 18 && j == 0) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[1].i = i;
+							ghosts[1].j = j;
 							board[i][j] = 9;
 						}
 					}
 					if (numManster == 3) {
 						if (i == 0 && j == 0) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[0].i = i;
+							ghosts[0].j = j;
 							board[i][j] = 8;
 						}
 						if (i == 18 && j == 0) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[1].i = i;
+							ghosts[1].j = j;
 							board[i][j] = 9;
 						}
 						if (i == 18 && j == 12) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[2].i = i;
+							ghosts[2].j = j;
 							board[i][j] = 10;
 						}
 					}
 					if (numManster == 4) {
 						if (i == 0 && j == 0) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[0].i = i;
+							ghosts[0].j = j;
 							board[i][j] = 8;
 						}
 						if (i == 18 && j == 0) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[1].i = i;
+							ghosts[1].j = j;
 							board[i][j] = 9;
 						}
 						if (i == 18 && j == 12) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[2].i = i;
+							ghosts[2].j = j;
 							board[i][j] = 10;
 						}
 						if (i == 0 && j == 12) {
-							ghost.i = i;
-							ghost.j = j;
+							ghosts[3].i = i;
+							ghosts[3].j = j;
 							board[i][j] = 11;
 						}
 					}
@@ -703,13 +840,13 @@ function Start() {
 		},
 		false
 	);
-	interval = setInterval(UpdatePosition, 150);
-	interval = setInterval(UpdateGhostPosition, 300);
+	interval = setInterval(UpdatePosition, 500);
+
+	
+		interval = setInterval(UpdateGhostPosition, 1000);
+	
+	
 }
-
-
-
-
 
 
 function countBalls(num) {
@@ -723,6 +860,3 @@ function countBalls(num) {
 		return numOfColor25;
 	}
 }
-
-
-
