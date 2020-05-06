@@ -1,4 +1,4 @@
-//4/5/20 update 1.1
+//6/5/20 update 1.2
 var context;
 var remain;
 var shape = new Object();
@@ -7,11 +7,11 @@ var score;
 var pac_color;
 var start_time;
 var time_elapsed;
-var interval;
-var interval1;
-var packLife=3;
-
-var foodValue= [0,0,0,0];
+var intervalPack;
+var intervalGhost;
+var packLife = 3;
+var user;
+var foodValue = [0, 0, 0, 0];
 var food_remain;
 var userKeys = {
 	left: 37,
@@ -19,7 +19,7 @@ var userKeys = {
 	right: 39,
 	down: 40
 };
-var ghosts= [new Object(),new Object(),new Object(),new Object()];
+var ghosts = [new Object(), new Object(), new Object(), new Object()];
 // var ghost1 = new Object();//board[i][j]==8
 // var ghost2 = new Object();//board[i][j]==9
 // var ghost3 = new Object();//board[i][j]==10
@@ -132,18 +132,31 @@ function drewGhost(clr, x, y) {
 
 }
 
-
+$(document).ready(function () {
+	document.getElementById("lblUser").value = " " + document.getElementById("login_username").value;
+});
 function Draw() {
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
-	lblTime.value = time_elapsed;
+	
+	//lblUser.value=user;
+	lblTime.value = timeLimit - time_elapsed;
+	lblTime.value = parseInt(lblTime.value);
+	if (lblTime.value <= 0) {
+		alert("Sorry,time's up");
+		window.clearInterval(intervalPack);
+		window.clearInterval(intervalGhost);
+		lblTime.value = 60;
+		showSetting();
+
+	}
 	for (var i = 0; i < 19; i++) {
 		for (var j = 0; j < 13; j++) {
 			var center = new Object();
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
 			if (board[i][j] == 8) {
-				
+
 				drewGhost('red', center.x, center.y);
 			}
 			if (board[i][j] == 9) {
@@ -204,7 +217,7 @@ function Draw() {
 				// circle to eat 5p
 			} else if (board[i][j] == 5) {
 				context.beginPath();
-				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+				context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // circle
 				context.fillStyle = color5; //color
 				context.fill();
 				// circle to eat 15p
@@ -216,7 +229,7 @@ function Draw() {
 				// circle to eat 25p
 			} else if (board[i][j] == 7) {
 				context.beginPath();
-				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+				context.arc(center.x, center.y, 20, 0, 2 * Math.PI); // circle
 				context.fillStyle = color25; //color
 				context.fill();
 				//the wall
@@ -231,9 +244,12 @@ function Draw() {
 }
 //board[i][j] != 8 &&board[i][j] != 9 &&board[i][j] != 10 &&board[i][j] != 11
 function isValidMoveForGhost(i, j) {
-	if (board[i][j] != 4 &&  
-		 j >= 0 && j <= 12 && i >= 0 && i <= 18) {
-		return true;
+	i = parseInt(i);
+	j = parseInt(j);
+	if (j >= 0 && j <= 12 && i >= 0 && i <= 18) {
+		if (board[i][j] != 4 && board[i][j] != 8 && board[i][j] != 9 &&
+			board[i][j] != 10 && board[i][j] != 11)
+			return true;
 	}
 	else {
 		return false;
@@ -253,223 +269,405 @@ function ghostMoveDown(ghostX) {
 	ghostX.j++;
 }
 
-function kindOfFood(i,j){
-	if(board[i][j]==5 || board[i][j]==6 || board[i][j]==7){
-			return board[i][j];
+function kindOfFood(i, j) {
+	if(i>=0 && i<19 && j>=0 && j<12){
+	if (board[i][j] == 5 || board[i][j] == 6 || board[i][j] == 7) {
+		return board[i][j];
 	}
+}
 	return 0;
 }
 
 function UpdateGhostPosition() {
+	var tmpRnd;
+	for (var t = 0; t < numManster; t++) {
+		tmpRnd = Math.random();
+		let lCnt = 0;
+		board[ghosts[t].i][ghosts[t].j] = foodValue[t];
 
-	for(var t=0;t<numManster;t++){
-	board[ghosts[t].i][ghosts[t].j] = foodValue[t];
-	////up
-	if (shape.j < ghosts[t].j) {//check if pac is up
-		if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {// is up valid?
-			foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j - 1);
-			//if(foodValue==0){
-			ghostMoveUp(ghosts[t]);
-			// }
-			// else{
-			// 	continue;
-			// }
-		}
-		else {//up not valid
-			if (shape.i > ghosts[t].i) {//check if pac is right
-				if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//is right valid?
-					foodValue[t]=kindOfFood(ghosts[t].i+1, ghosts[t].j);
-					//	if(foodValue==0){
+	
+		if (tmpRnd > 0.2) {
+			////up
+			if (shape.j < ghosts[t].j) {//check if pac is up
+				if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {// is up valid?
+					if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
+						packLife--;
+						
+						locatePackRandomly();
+						locateGhostInCorner();
+					}
+					foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j - 1);
+					ghostMoveUp(ghosts[t]);
+				}
+				else {//up not valid
+					if (shape.i > ghosts[t].i) {//check if pac is right
+						if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//is right valid?
+							if (canEatPack(ghosts[t].i + 1, ghosts[t].j)) {
+								packLife--;
+								
+								locatePackRandomly();
+								locateGhostInCorner();
+							}
+							foodValue[t] = kindOfFood(ghosts[t].i + 1, ghosts[t].j);
+							ghostMoveRight(ghosts[t]);
+						}
+						else {//right not valid
+							if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {//check if down is valid
+								if (canEatPack(ghosts[t].i, ghosts[t].j + 1)) {
+									packLife--;
+									
+									locatePackRandomly();
+									locateGhostInCorner();
+								}
+								foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j + 1);
+								ghostMoveDown(ghosts[t]);
+							}
+							else {
+								if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
+									packLife--;
+									
+									locatePackRandomly();
+									locateGhostInCorner();
+								}
+								foodValue[t] = kindOfFood(ghosts[t].i - 1, ghosts[t].j);
+								ghostMoveLeft(ghosts[t]);
+							}
+						}
+					}
+				}
+			}
+
+			//try packman is right
+			else if (shape.i > ghosts[t].i) {
+				if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {
+					if (canEatPack(ghosts[t].i + 1, ghosts[t].j)) {
+						packLife--;
+						
+						locatePackRandomly();
+						locateGhostInCorner();
+					}
+					foodValue[t] = kindOfFood(ghosts[t].i + 1, ghosts[t].j);
 					ghostMoveRight(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }
 				}
-
-				else {//right not valid
-					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {//check if down is valid
-						foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
-						//if(foodValue==0){
-							ghostMoveDown(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
+				else {//right move is not valid
+					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {
+						if (canEatPack(ghosts[t].i, ghosts[t].j + 1)) {
+							packLife--;
+							
+							locatePackRandomly();
+							locateGhostInCorner();
+						}
+						foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j + 1);
+						ghostMoveDown(ghosts[t]);
 					}
-					else {
-						
-						foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
-						//if(foodValue==0){
+					else {//down move is not valid
+						if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {
+							if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
+								packLife--;
+								
+								locatePackRandomly();
+								locateGhostInCorner();
+							}
+							foodValue[t] = kindOfFood(ghosts[t].i - 1, ghosts[t].j);
 							ghostMoveLeft(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
-					}
-				}
-			}		
-		}
-	}
+						}
+						else {//left move is not valid
 
-	//try packman is right
-	else if (shape.i > ghosts[t].i) {
-		if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {
-			foodValue[t]=kindOfFood(ghosts[t].i+1, ghosts[t].j);
-					//	if(foodValue==0){
-							ghostMoveRight(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
-			
-		}
-		else {//right move is not valid
-			if (isValidMoveForGhost(ghosts[t].i , ghosts[t].j + 1)) {
-				foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
-					//	if(foodValue==0){
-							ghostMoveDown(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
-				
-			}
-			else {//down move is not valid
-				if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {
-					foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
-					//	if(foodValue==0){
-							ghostMoveLeft(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
-				
-				
-				}
-				else {//left move is not valid
-					
-
-					foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
-					//	if(foodValue==0){
-							ghostMoveUp(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
-				
-				}
-			}
-		}
-	}
-	//pac is down
-
-	else if (shape.j > ghosts[t].j) { // check pacman is down
-		if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {// is down valid?
-			
-
-			foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
-					//	if(foodValue==0){
-							ghostMoveDown(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
-				
-		}
-		else {//down not valid
-			if (shape.i < ghosts[t].i) {//check if pac is left
-				if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//is left valid?
-					foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
-					//	if(foodValue==0){
-							ghostMoveLeft(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }	
-				
-					
-				}
-				else {//left not valid
-					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
-						foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j-1);
-					//	if(foodValue==0){
-							ghostMoveUp(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }
-						
-					}
-					else {
-						
-						foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j-1);
-						//if(foodValue==0){
-							ghostMoveRight(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }
-					}
-				}
-			}
-		}
-	}
-	//ppack is left
-	else {
-		if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//check if left is valid
-			foodValue[t]=kindOfFood(ghosts[t].i-1, ghosts[t].j);
-						//if(foodValue==0){
-							ghostMoveLeft(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }
-			
-		}
-		else {
-			if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
-				
-				foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j-1);
-					//	if(foodValue==0){
+							if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
+								packLife--;
+								
+								locatePackRandomly();
+								locateGhostInCorner();
+							}
+							foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j - 1);
 							ghostMoveUp(ghosts[t]);
 
-						// }
-						// else{
-						// 	continue;
-						// }
-			
+						}
+					}
+				}
 			}
+			//pac is down
+
+			else if (shape.j > ghosts[t].j) { // check pacman is down
+				if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {// is down valid?
+
+					if (canEatPack(ghosts[t].i, ghosts[t].j + 1)) {
+						packLife--;
+						
+						locatePackRandomly();
+						locateGhostInCorner();
+					}
+					foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j + 1);
+
+					ghostMoveDown(ghosts[t]);
+
+				}
+				else {//down not valid
+					if (shape.i < ghosts[t].i) {//check if pac is left
+						if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//is left valid?
+							if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
+								packLife--;
+							
+								locatePackRandomly();
+								locateGhostInCorner();
+							}
+							foodValue[t] = kindOfFood(ghosts[t].i - 1, ghosts[t].j);
+							ghostMoveLeft(ghosts[t]);
+						}
+						else {//left not valid
+							if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
+								if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
+									packLife--;
+								
+									locatePackRandomly();
+									locateGhostInCorner();
+								}
+								foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j - 1);
+								ghostMoveUp(ghosts[t]);
+							}
+							else {
+								if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
+									packLife--;
+									
+									locatePackRandomly();
+									locateGhostInCorner();
+								}
+								foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j - 1);
+								ghostMoveRight(ghosts[t]);
+							}
+						}
+					}
+				}
+			}
+			//ppack is left
 			else {
-				if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//check if right move is valid
-					foodValue[t]=kindOfFood(ghosts[t].i+1, ghosts[t].j);
-					//	if(foodValue==0){
-							ghostMoveRight(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }
-					
+				if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//check if left is valid
+					if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
+						packLife--;
+						
+						locatePackRandomly();
+						locateGhostInCorner();
+					}
+					foodValue[t] = kindOfFood(ghosts[t].i - 1, ghosts[t].j);
+					ghostMoveLeft(ghosts[t]);
 				}
 				else {
-				
+					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
+						if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
+							packLife--;
+							
+							locatePackRandomly();
+							locateGhostInCorner();
+						}
+						foodValue[t] = kindOfFood(ghosts[t].i, ghosts[t].j - 1);
 
-					foodValue[t]=kindOfFood(ghosts[t].i, ghosts[t].j+1);
-					//	if(foodValue==0){
-							ghostMoveDown(ghosts[t]);
-						// }
-						// else{
-						// 	continue;
-						// }
+						ghostMoveUp(ghosts[t]);
+
+					}
+					else {
+						if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//check if right move is valid
+							if (canEatPack(ghosts[t].i + 1, ghosts[t].j)) {
+								packLife--;
+								
+								locatePackRandomly();
+								locateGhostInCorner();
+							}
+							foodValue[t] = kindOfFood(ghosts[t].i + 1, ghosts[t].j);
+							ghostMoveRight(ghosts[t]);
+						}
+								else {
+
+									if (canEatPack()) {
+										board[ghosts[t].i + 1, ghosts[t].j] = 0;
+										packLife--;
+										
+										locatePackRandomly();
+										locateGhostInCorner();
+									}
+									foodValue[t] = kindOfFood(ghosts[t].i + 1, ghosts[t].j);
+									ghostMoveDown(ghosts[t]);
+
+								}
+					}
 				}
 			}
 		}
+		else {
+			chooseRandomWayForGhost(ghosts[t],t);
+		}
+		if (packLife == 0) {
+			window.alert("Game over");
+			window.clearInterval(intervalPack);
+			window.clearInterval(intervalGhost);
+			packLife = 3;
+			showSetting();
+		}
+		board[ghosts[t].i][ghosts[t].j] = t + 8;
+		Draw();
 	}
 
-	board[ghosts[t].i][ghosts[t].j] = t+8;
-	Draw();
+}
+function chooseRandomWayForGhost(curr,t) {
+	let way = Math.floor(Math.random() * 4);
+	let flag = true;
+	//while (flag) {
+		if (way == 0) {
+			if (isValidMoveForGhost(curr.i, curr.j + 1)) {//check if right move is valid
+				if (canEatPack(curr.i, curr.j + 1)) {
+					packLife--;
+					
+					locatePackRandomly();
+					locateGhostInCorner();
+				}
+				foodValue[t] = kindOfFood(curr.i, curr.j + 1);
+				ghostMoveDown(curr);
+			}
+			flag=false;
+		}
+		if (way == 1) {
+			if (isValidMoveForGhost(curr.i, curr.j - 1)) {//check if right move is valid
+				if (canEatPack(curr.i, curr.j - 1)) {
+					packLife--;
+					
+					locatePackRandomly();
+					locateGhostInCorner();
+				}
+				foodValue[t] = kindOfFood(curr.i, curr.j - 1);
+				ghostMoveUp(curr);
+			}
+			flag=false;
+		}
+		if (way == 2) {
+			if (isValidMoveForGhost(curr.i - 1, curr.j)) {//check if right move is valid
+				if (canEatPack(curr.i - 1, curr.j)) {
+
+					packLife--;
+					
+					locatePackRandomly();
+					locateGhostInCorner();
+				}
+				foodValue[t] = kindOfFood(curr.i - 1, curr.j);
+				ghostMoveLeft(curr);
+			}
+			flag=false;
+		}
+		else {
+			if (isValidMoveForGhost(curr.i + 1, curr.j)) {//check if right move is valid
+				if (canEatPack(curr.i + 1, curr.j)) {
+					packLife--;
+					locatePackRandomly();
+					locateGhostInCorner();
+				}
+				foodValue[t] = kindOfFood(curr.i + 1, curr.j);
+				ghostMoveRight(curr);
+			}
+			flag=false;
+		}
+		way = Math.floor(Math.random() * 4);
+	//}
+
+}
+function indexOfPackInFoodVal(){
+	// for(var e=0;e<foodValue.length;e++){
+	// 	if(foodValue[e]==2){
+	// 		return e;
+	// 	}
+	// 	else{
+	// 		return -1;
+	// 	}
+	// }
+	for(var h=0;h<numManster;h++){
+		if(foodValue[h]==2){
+			foodValue[h]=0;
+		}
+	}
+}
+function locateGhostInCorner(){
+	if(numManster==4){
+		//indexOfPackInFoodVal();
+		
+		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
+		ghosts[0].i=0;
+		ghosts[0].j=0;
+		//board[0][0]=8;
+		board[ghosts[1].i][ghosts[1].j]=foodValue[1];
+		//board[18][0]=9;
+		ghosts[1].i=18;
+		ghosts[1].j=0;
+		board[ghosts[2].i][ghosts[2].j]=foodValue[2];
+		ghosts[2].i=18;
+		ghosts[2].j=12;
+		//board[18][12]=10;
+		board[ghosts[3].i][ghosts[3].j]=foodValue[3];
+		//board[0][12]=11;
+		ghosts[3].i=0;
+		ghosts[3].j=12;
+		
+	}
+	if(numManster==3){
+	//	indexOfPackInFoodVal();
+		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
+		//board[0][0]=8
+		ghosts[0].i=0;
+		ghosts[0].j=0;
+		board[ghosts[1].i][ghosts[1].j]=foodValue[1];
+		//board[18][0]=9;
+		ghosts[1].i=18;
+		ghosts[1].j=0;
+		board[ghosts[2].i][ghosts[2].j]=foodValue[2];
+		//board[18][12]=10;
+		ghosts[2].i=18;
+		ghosts[2].j=12;
+		
+		
+	}
+	if(numManster==2){
+	//	indexOfPackInFoodVal();
+		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
+		//board[0][0]=8
+		ghosts[0].i=0;
+		ghosts[0].j=0;
+		board[ghosts[1].i][ghosts[1].j]=foodValue[1];
+		//board[18][0]=9;
+		ghosts[1].i=18;
+		ghosts[1].j=0;
+		
+		
+	}
+	if(numManster==1){
+		//indexOfPackInFoodVal();
+		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
+		//board[0][0]=8
+		ghosts[0].i=0;
+		ghosts[0].j=0;
+	
+		
+	}
+	
+}
+function locatePackRandomly() {
+	if(score>=10){
+		score=score-10;
+	}
+	else{
+		score=0;
+	}
+	
+	
+	var emptyCell = findRandomEmptyCell(board);
+	board[shape.i][shape.j]=0;
+	shape.i = emptyCell[0];
+	shape.j = emptyCell[1];
 }
 
+function canEatPack(i, j) {
+	if (board[i][j] == 2) {
+
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 function UpdatePosition() {
@@ -509,31 +707,7 @@ function UpdatePosition() {
 		score = score + 25;
 	}
 
-	if (board[shape.i][shape.j] == 8) {
-		packLife--;
-		
-	}
-	if (board[shape.i][shape.j] == 9) {
-		packLife--;
-		
-			
-	}
-	if (board[shape.i][shape.j] == 10) {
-		packLife--;
-		
-			
-	}
-	if (board[shape.i][shape.j] == 11) {
-		packLife--;
-				
-	}
 
-	if(packLife==0){
-		window.alert("Game over");
-		packLife=3;
-		showSetting();
-		}
-		
 
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();
@@ -541,18 +715,18 @@ function UpdatePosition() {
 	if (score >= 20 && time_elapsed <= 10) {
 		pac_color = "green";
 	}
-	
-	if (score >= 500) {
-		window.alert("Game completed");
-		window.clearInterval(interval);
-		
-		score=0;
-		showSetting();
-	} else {
-		Draw();
 
+	if (score >= 200) {
+		window.alert("Game completed");
+		window.clearInterval(intervalPack);
+		window.clearInterval(intervalGhost);
+		score = 0;
+		showSetting();
 	}
 
+	else {
+		Draw();
+	}
 }
 
 
@@ -578,60 +752,53 @@ function Start() {
 	start_time = new Date();
 	numManster = parseInt(numManster);
 
-		//(i == 3 && j == 0) ||
-			//	(i == 15 && j == 0) ||
-			//	(i == 0 && j == 3) ||
-				//(i == 18 && j == 3) ||
-				//(i == 18 && j == 9) ||
-				// (i == 3 && j == 12) ||
-				// (i == 15 && j == 12)) 
-				// (i == 0 && j == 9) ||
+
 	for (var i = 0; i < 19; i++) {
 		board[i] = new Array();
-		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
+
 		for (var j = 0; j < 13; j++) {
 			if (
 				(i == 1 && j == 1) ||
 				(i == 3 && j == 1) ||
-				(i == 5 && j == 1) ||
+				//(i == 5 && j == 1) ||
 				(i == 7 && j == 1) ||
-				(i == 8 && j == 1) ||
-				(i == 9 && j == 1) ||
-				(i == 10 && j == 1) ||
+				//(i == 8 && j == 1) ||
+				//(i == 9 && j == 1) ||
+			//	(i == 10 && j == 1) ||
 				(i == 11 && j == 1) ||
-				(i == 13 && j == 1) ||
+				//(i == 13 && j == 1) ||
 				(i == 15 && j == 1) ||
 				(i == 17 && j == 1) ||
 				(i == 1 && j == 2) ||
-				(i == 5 && j == 2) ||
+				//(i == 5 && j == 2) ||
 				(i == 9 && j == 2) ||
-				(i == 13 && j == 2) ||
+				//(i == 13 && j == 2) ||
 				(i == 17 && j == 2) ||
-				(i == 1 && j == 3) ||
+				//(i == 1 && j == 3) ||
 				(i == 3 && j == 3) ||
 				(i == 4 && j == 3) ||
-				(i == 5 && j == 3) ||
+			//	(i == 5 && j == 3) ||
 				(i == 6 && j == 3) ||
 				(i == 7 && j == 3) ||
 				(i == 9 && j == 3) ||
 				(i == 11 && j == 3) ||
 				(i == 12 && j == 3) ||
-				(i == 13 && j == 3) ||
+				//(i == 13 && j == 3) ||
 				(i == 14 && j == 3) ||
 				(i == 15 && j == 3) ||
-				(i == 17 && j == 3) ||
+			//	(i == 17 && j == 3) ||
 				(i == 1 && j == 4) ||
-				(i == 5 && j == 4) ||
-				(i == 13 && j == 4) ||
+				//(i == 5 && j == 4) ||
+			//	(i == 13 && j == 4) ||
 				(i == 17 && j == 4) ||
 				(i == 1 && j == 5) ||
 				(i == 3 && j == 5) ||
-				(i == 5 && j == 5) ||
+			//	(i == 5 && j == 5) ||
 				(i == 7 && j == 5) ||
 				(i == 8 && j == 5) ||
 				(i == 10 && j == 5) ||
 				(i == 11 && j == 5) ||
-				(i == 13 && j == 5) ||
+				//(i == 13 && j == 5) ||
 				(i == 15 && j == 5) ||
 				(i == 17 && j == 5) ||
 				(i == 3 && j == 6) ||
@@ -640,46 +807,46 @@ function Start() {
 				(i == 15 && j == 6) ||
 				(i == 1 && j == 7) ||
 				(i == 3 && j == 7) ||
-				(i == 5 && j == 7) ||
+				//(i == 5 && j == 7) ||
 				(i == 7 && j == 7) ||
 				(i == 8 && j == 7) ||
-				(i == 9 && j == 7) ||
+				//(i == 9 && j == 7) ||
 				(i == 10 && j == 7) ||
 				(i == 11 && j == 7) ||
-				(i == 13 && j == 7) ||
+				//(i == 13 && j == 7) ||
 				(i == 15 && j == 7) ||
 				(i == 17 && j == 7) ||
 				(i == 1 && j == 8) ||
-				(i == 5 && j == 8) ||
-				(i == 13 && j == 8) ||
-				(i == 17 && j == 8) ||
-				(i == 1 && j == 9) ||
+				//(i == 5 && j == 8) ||
+				//(i == 13 && j == 8) ||
+				//(i == 17 && j == 8) ||
+				//(i == 1 && j == 9) ||
 				(i == 3 && j == 9) ||
 				(i == 4 && j == 9) ||
-				(i == 5 && j == 9) ||
+				//(i == 5 && j == 9) ||
 				(i == 6 && j == 9) ||
 				(i == 7 && j == 9) ||
 				(i == 9 && j == 9) ||
 				(i == 11 && j == 9) ||
 				(i == 12 && j == 9) ||
-				(i == 13 && j == 9) ||
+				//(i == 13 && j == 9) ||
 				(i == 14 && j == 9) ||
 				(i == 15 && j == 9) ||
-				(i == 17 && j == 9) ||
+				//(i == 17 && j == 9) ||
 				(i == 1 && j == 10) ||
-				(i == 5 && j == 10) ||
+				//(i == 5 && j == 10) ||
 				(i == 9 && j == 10) ||
-				(i == 13 && j == 10) ||
+				//(i == 13 && j == 10) ||
 				(i == 17 && j == 10) ||
 				(i == 1 && j == 11) ||
 				(i == 3 && j == 11) ||
-				(i == 5 && j == 11) ||
+				//(i == 5 && j == 11) ||
 				(i == 7 && j == 11) ||
 				(i == 8 && j == 11) ||
 				(i == 9 && j == 11) ||
 				(i == 10 && j == 11) ||
 				(i == 11 && j == 11) ||
-				(i == 13 && j == 11) ||
+				//(i == 13 && j == 11) ||
 				(i == 15 && j == 11) ||
 				(i == 17 && j == 11)) {
 				board[i][j] = 4;
@@ -789,7 +956,7 @@ function Start() {
 		}
 	}
 
-	if (typeof shape.i == "undefined") {
+	if (typeof shape.i == "undefined" || typeof shape.j == "undefined") {
 		var emptyCell = findRandomEmptyCell(board);
 		shape.i = emptyCell[0];
 		shape.j = emptyCell[1];
@@ -840,12 +1007,12 @@ function Start() {
 		},
 		false
 	);
-	interval = setInterval(UpdatePosition, 500);
+	intervalPack = setInterval(UpdatePosition, 250);
 
-	
-		interval = setInterval(UpdateGhostPosition, 1000);
-	
-	
+
+	intervalGhost = setInterval(UpdateGhostPosition, 350);
+
+
 }
 
 

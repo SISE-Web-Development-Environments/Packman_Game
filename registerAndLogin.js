@@ -172,14 +172,17 @@ function registerFunc() {
 	return false;
     }     
 }
-
+$
 
 function loginFunc() {
 	var loguserName = document.getElementById("login_username").value;
 	var logpassward = document.getElementById("login_password").value;
 	var temp = localStorage.getItem(loguserName);
+	document.getElementById("lblUser").value = " " + loguserName;
+	
 	if (temp == logpassward) {
 		window.alert("confirm");
+	
 		showSetting();
 		return true;
 	}
