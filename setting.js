@@ -1,18 +1,19 @@
 
 var numManster;
-
+var foodForRestart;
 function submitSetting() {
 
 	flagRandom = false;
 	food_remain = document.getElementById("numOfBalls").value;
-	remain = food_remain;
+	foodForRestart=document.getElementById("numOfBalls").value;
+	remain = foodForRestart;
 	color5 = document.getElementById("color5p").value;
 	color15 = document.getElementById("color15p").value;
 	color25 = document.getElementById("color25p").value;
 
-	numOfColor5 = Math.floor(food_remain * 0.6);
+	numOfColor5 = Math.floor(foodForRestart * 0.6);
 	remain = remain - numOfColor5;
-	numOfColor15 = Math.floor(food_remain * 0.3);
+	numOfColor15 = Math.floor(foodForRestart * 0.3);
 	remain = remain - numOfColor15;
 	numOfColor25 = remain;
 
@@ -62,8 +63,8 @@ function randomSetting() {
 
 	flagRandom = true;
 	food_remain = Math.floor(Math.random() * 40) + 50;
-
-	remain = food_remain;
+	foodForRestart=food_remain;
+	remain = foodForRestart;
 	color5 = get_random_color();
 	color15 = get_random_color();
 	color25 = get_random_color();
@@ -72,14 +73,14 @@ function randomSetting() {
 		color15 = get_random_color();
 		color25 = get_random_color();
 	}
-	numOfColor5 = Math.floor(food_remain * 0.6);
+	numOfColor5 = Math.floor(foodForRestart * 0.6);
 	remain = remain - numOfColor5;
-	numOfColor15 = Math.floor(food_remain * 0.3);
+	numOfColor15 = Math.floor(foodForRestart * 0.3);
 	remain = remain - numOfColor15;
 	numOfColor25 = remain;
 	timeLimit = Math.floor(Math.random() * 100 + 60);
 	numManster = Math.floor(Math.random() * 4 + 1);
-	alert("random   " + "fr:" + food_remain + ".\n c5:" + color5 + ".\n c15:" + color15 + ".\n nc5:" + numOfColor5 + ".\n nc15:" + numOfColor15 + ".\n c25:" + color25 + ".\n nc25:" + numOfColor25 + ".\n limT:" + timeLimit + ".\n nManster:" + numManster);
+	alert("random   " + "fr:" + foodForRestart + ".\n c5:" + color5 + ".\n c15:" + color15 + ".\n nc5:" + numOfColor5 + ".\n nc15:" + numOfColor15 + ".\n c25:" + color25 + ".\n nc25:" + numOfColor25 + ".\n limT:" + timeLimit + ".\n nManster:" + numManster);
 
 	$(document).ready(function () {
 		context = canvas.getContext("2d");

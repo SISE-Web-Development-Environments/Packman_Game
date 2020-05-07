@@ -2,6 +2,8 @@
 var context;
 var remain;
 var shape = new Object();
+var bonus = new Object();
+var bonusVal = 0;
 var board;
 var score;
 var pac_color;
@@ -9,8 +11,10 @@ var start_time;
 var time_elapsed;
 var intervalPack;
 var intervalGhost;
-var packLife = 3;
+var intervalBonus;
+var packLife = 5;
 var user;
+var bonusFlag = true;
 var foodValue = [0, 0, 0, 0];
 var food_remain;
 var userKeys = {
@@ -19,6 +23,11 @@ var userKeys = {
 	right: 39,
 	down: 40
 };
+var imageClock = new Image();
+var imagePill = new Image();
+var pillFlag=true;
+var clockFlag=true;
+var gameMusic = new Audio("./audio/gameMusic.mpeg");
 var ghosts = [new Object(), new Object(), new Object(), new Object()];
 // var ghost1 = new Object();//board[i][j]==8
 // var ghost2 = new Object();//board[i][j]==9
@@ -135,17 +144,55 @@ function drewGhost(clr, x, y) {
 $(document).ready(function () {
 	document.getElementById("lblUser").value = " " + document.getElementById("login_username").value;
 });
+
+
+
+function startNewGame() {
+
+	window.clearInterval(intervalPack);
+	window.clearInterval(intervalGhost);
+	window.clearInterval(intervalBonus);
+	food_remain = foodForRestart;
+	numOfColor5 = Math.floor(foodForRestart * 0.6);
+	remain = remain - numOfColor5;
+	numOfColor15 = Math.floor(foodForRestart * 0.3);
+	remain = remain - numOfColor15;
+	numOfColor25 = remain;
+	foodValue = [0, 0, 0, 0];
+
+	//	bonusVal = 0;
+	bonusFlag = true;
+	clockFlag = true;
+	pillFlag = true;
+	Start();
+
+	packLife = 5;
+
+	showGame();
+
+}
 function Draw() {
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
-	
+	lblLife.value = packLife;
 	//lblUser.value=user;
 	lblTime.value = timeLimit - time_elapsed;
 	lblTime.value = parseInt(lblTime.value);
 	if (lblTime.value <= 0) {
-		alert("Sorry,time's up");
+		if (score < 100) {
+			alert("You are better than " + score + " points!");
+			gameMusic.pause();
+		}
+		else {
+			gameMusic.pause();
+			alert("Winner!!!");
+		}
+
+		window.clearInterval(intervalBonus);
+
 		window.clearInterval(intervalPack);
 		window.clearInterval(intervalGhost);
+
 		lblTime.value = 60;
 		showSetting();
 
@@ -155,6 +202,40 @@ function Draw() {
 			var center = new Object();
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
+
+			
+			if (board[i][j] == 13) {
+				context.drawImage(imageClock,center.x-20,center.y-20,40,40);
+			}
+			
+			if (board[i][j] == 14) {
+				context.drawImage(imagePill,center.x-20,center.y-20,40,40);
+			}
+
+			if (board[i][j] == 12) {
+
+
+				context.fillStyle = 'blue';
+
+
+				var points = [[center.x - 20, center.y], [center.x - 5, center.y - 2], [center.x, center.y - 15], [center.x + 5, center.y - 2],
+				[center.x + 20, center.y], [center.x + 10, center.y + 8], [center.x + 12, center.y + 21], [center.x, center.y + 13],
+				[center.x - 12, center.y + 21], [center.x - 10, center.y + 8], [center.x - 20, center.y]];
+
+				var len = points.length;
+
+				context.beginPath();
+				context.moveTo(points[0][0], points[0][1]);
+
+				for (var m = 0; m < len; m++) {
+					context.lineTo(points[m][0], points[m][1]);
+				}
+
+				context.fill();
+				
+			}
+
+
 			if (board[i][j] == 8) {
 
 				drewGhost('red', center.x, center.y);
@@ -246,10 +327,13 @@ function Draw() {
 function isValidMoveForGhost(i, j) {
 	i = parseInt(i);
 	j = parseInt(j);
+
 	if (j >= 0 && j <= 12 && i >= 0 && i <= 18) {
 		if (board[i][j] != 4 && board[i][j] != 8 && board[i][j] != 9 &&
-			board[i][j] != 10 && board[i][j] != 11)
+			board[i][j] != 10 && board[i][j] != 11 && board[i][j] != 12 && board[i][j] != 13 && board[i][j] != 14) {
+
 			return true;
+		}
 	}
 	else {
 		return false;
@@ -269,12 +353,29 @@ function ghostMoveDown(ghostX) {
 	ghostX.j++;
 }
 
-function kindOfFood(i, j) {
-	if(i>=0 && i<19 && j>=0 && j<12){
-	if (board[i][j] == 5 || board[i][j] == 6 || board[i][j] == 7) {
-		return board[i][j];
-	}
+
+
+
+
+function bonusMoveLeft(bonus) {
+	bonus.i--;
 }
+function bonusMoveRight(bonus) {
+	bonus.i++;
+}
+function bonusMoveUp(bonus) {
+	bonus.j--;
+}
+function bonusMoveDown(bonus) {
+	bonus.j++;
+}
+
+function kindOfFood(i, j) {
+	if (i >= 0 && i < 19 && j >= 0 && j < 12) {
+		if (board[i][j] == 5 || board[i][j] == 6 || board[i][j] == 7) {
+			return board[i][j];
+		}
+	}
 	return 0;
 }
 
@@ -282,17 +383,19 @@ function UpdateGhostPosition() {
 	var tmpRnd;
 	for (var t = 0; t < numManster; t++) {
 		tmpRnd = Math.random();
-		let lCnt = 0;
-		board[ghosts[t].i][ghosts[t].j] = foodValue[t];
 
-	
+
+		if (ghosts[t].i >= 0 && ghosts[t].i <= 18 && ghosts[t].j >= 0 && ghosts[t].j <= 12) {
+			board[ghosts[t].i][ghosts[t].j] = foodValue[t];
+		}
+
 		if (tmpRnd > 0.2) {
 			////up
 			if (shape.j < ghosts[t].j) {//check if pac is up
 				if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {// is up valid?
 					if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
 						packLife--;
-						
+
 						locatePackRandomly();
 						locateGhostInCorner();
 					}
@@ -304,7 +407,7 @@ function UpdateGhostPosition() {
 						if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//is right valid?
 							if (canEatPack(ghosts[t].i + 1, ghosts[t].j)) {
 								packLife--;
-								
+
 								locatePackRandomly();
 								locateGhostInCorner();
 							}
@@ -315,7 +418,7 @@ function UpdateGhostPosition() {
 							if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {//check if down is valid
 								if (canEatPack(ghosts[t].i, ghosts[t].j + 1)) {
 									packLife--;
-									
+
 									locatePackRandomly();
 									locateGhostInCorner();
 								}
@@ -325,7 +428,7 @@ function UpdateGhostPosition() {
 							else {
 								if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
 									packLife--;
-									
+
 									locatePackRandomly();
 									locateGhostInCorner();
 								}
@@ -342,7 +445,7 @@ function UpdateGhostPosition() {
 				if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {
 					if (canEatPack(ghosts[t].i + 1, ghosts[t].j)) {
 						packLife--;
-						
+
 						locatePackRandomly();
 						locateGhostInCorner();
 					}
@@ -353,7 +456,7 @@ function UpdateGhostPosition() {
 					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j + 1)) {
 						if (canEatPack(ghosts[t].i, ghosts[t].j + 1)) {
 							packLife--;
-							
+
 							locatePackRandomly();
 							locateGhostInCorner();
 						}
@@ -364,7 +467,7 @@ function UpdateGhostPosition() {
 						if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {
 							if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
 								packLife--;
-								
+
 								locatePackRandomly();
 								locateGhostInCorner();
 							}
@@ -375,7 +478,7 @@ function UpdateGhostPosition() {
 
 							if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
 								packLife--;
-								
+
 								locatePackRandomly();
 								locateGhostInCorner();
 							}
@@ -393,7 +496,7 @@ function UpdateGhostPosition() {
 
 					if (canEatPack(ghosts[t].i, ghosts[t].j + 1)) {
 						packLife--;
-						
+
 						locatePackRandomly();
 						locateGhostInCorner();
 					}
@@ -407,7 +510,7 @@ function UpdateGhostPosition() {
 						if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//is left valid?
 							if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
 								packLife--;
-							
+
 								locatePackRandomly();
 								locateGhostInCorner();
 							}
@@ -418,7 +521,7 @@ function UpdateGhostPosition() {
 							if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
 								if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
 									packLife--;
-								
+
 									locatePackRandomly();
 									locateGhostInCorner();
 								}
@@ -428,7 +531,7 @@ function UpdateGhostPosition() {
 							else {
 								if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
 									packLife--;
-									
+
 									locatePackRandomly();
 									locateGhostInCorner();
 								}
@@ -444,7 +547,7 @@ function UpdateGhostPosition() {
 				if (isValidMoveForGhost(ghosts[t].i - 1, ghosts[t].j)) {//check if left is valid
 					if (canEatPack(ghosts[t].i - 1, ghosts[t].j)) {
 						packLife--;
-						
+
 						locatePackRandomly();
 						locateGhostInCorner();
 					}
@@ -455,7 +558,7 @@ function UpdateGhostPosition() {
 					if (isValidMoveForGhost(ghosts[t].i, ghosts[t].j - 1)) {//check if up is valid
 						if (canEatPack(ghosts[t].i, ghosts[t].j - 1)) {
 							packLife--;
-							
+
 							locatePackRandomly();
 							locateGhostInCorner();
 						}
@@ -468,106 +571,159 @@ function UpdateGhostPosition() {
 						if (isValidMoveForGhost(ghosts[t].i + 1, ghosts[t].j)) {//check if right move is valid
 							if (canEatPack(ghosts[t].i + 1, ghosts[t].j)) {
 								packLife--;
-								
+
 								locatePackRandomly();
 								locateGhostInCorner();
 							}
 							foodValue[t] = kindOfFood(ghosts[t].i + 1, ghosts[t].j);
 							ghostMoveRight(ghosts[t]);
 						}
-								else {
+						else {
 
-									if (canEatPack()) {
-										board[ghosts[t].i + 1, ghosts[t].j] = 0;
-										packLife--;
-										
-										locatePackRandomly();
-										locateGhostInCorner();
-									}
-									foodValue[t] = kindOfFood(ghosts[t].i + 1, ghosts[t].j);
-									ghostMoveDown(ghosts[t]);
+							if (canEatPack()) {
+								board[ghosts[t].i + 1, ghosts[t].j] = 0;
+								packLife--;
 
-								}
+								locatePackRandomly();
+								locateGhostInCorner();
+							}
+							foodValue[t] = kindOfFood(ghosts[t].i + 1, ghosts[t].j);
+							ghostMoveDown(ghosts[t]);
+
+						}
 					}
 				}
 			}
 		}
 		else {
-			chooseRandomWayForGhost(ghosts[t],t);
+			chooseRandomWayForGhost(ghosts[t], t);
 		}
 		if (packLife == 0) {
-			window.alert("Game over");
+
+			window.alert("Loser!");
+			gameMusic.pause();
+			window.clearInterval(intervalBonus);
 			window.clearInterval(intervalPack);
 			window.clearInterval(intervalGhost);
-			packLife = 3;
+			packLife = 5;
 			showSetting();
 		}
-		board[ghosts[t].i][ghosts[t].j] = t + 8;
+		try {
+
+		} catch (error) {
+
+		}
+		if (ghosts[t].i >= 0 && ghosts[t].i <= 18 && ghosts[t].j >= 0 && ghosts[t].j <= 12) {
+			board[ghosts[t].i][ghosts[t].j] = t + 8;
+		}
 		Draw();
+
 	}
 
 }
-function chooseRandomWayForGhost(curr,t) {
+function chooseRandomWayForBonus(curr) {
 	let way = Math.floor(Math.random() * 4);
 	let flag = true;
 	//while (flag) {
-		if (way == 0) {
-			if (isValidMoveForGhost(curr.i, curr.j + 1)) {//check if right move is valid
-				if (canEatPack(curr.i, curr.j + 1)) {
-					packLife--;
-					
-					locatePackRandomly();
-					locateGhostInCorner();
-				}
-				foodValue[t] = kindOfFood(curr.i, curr.j + 1);
-				ghostMoveDown(curr);
-			}
-			flag=false;
-		}
-		if (way == 1) {
-			if (isValidMoveForGhost(curr.i, curr.j - 1)) {//check if right move is valid
-				if (canEatPack(curr.i, curr.j - 1)) {
-					packLife--;
-					
-					locatePackRandomly();
-					locateGhostInCorner();
-				}
-				foodValue[t] = kindOfFood(curr.i, curr.j - 1);
-				ghostMoveUp(curr);
-			}
-			flag=false;
-		}
-		if (way == 2) {
-			if (isValidMoveForGhost(curr.i - 1, curr.j)) {//check if right move is valid
-				if (canEatPack(curr.i - 1, curr.j)) {
+	if (way == 0) {
+		if (isValidMoveForGhost(curr.i, curr.j + 1)) {//check if right move is valid
 
-					packLife--;
-					
-					locatePackRandomly();
-					locateGhostInCorner();
-				}
-				foodValue[t] = kindOfFood(curr.i - 1, curr.j);
-				ghostMoveLeft(curr);
-			}
-			flag=false;
+			bonusVal = kindOfFood(curr.i, curr.j + 1);
+			bonusMoveDown(curr);
 		}
-		else {
-			if (isValidMoveForGhost(curr.i + 1, curr.j)) {//check if right move is valid
-				if (canEatPack(curr.i + 1, curr.j)) {
-					packLife--;
-					locatePackRandomly();
-					locateGhostInCorner();
-				}
-				foodValue[t] = kindOfFood(curr.i + 1, curr.j);
-				ghostMoveRight(curr);
-			}
-			flag=false;
+		flag = false;
+	}
+	if (way == 1) {
+		if (isValidMoveForGhost(curr.i, curr.j - 1)) {//check if right move is valid
+
+			bonusVal = kindOfFood(curr.i, curr.j - 1);
+			bonusMoveUp(curr);
 		}
-		way = Math.floor(Math.random() * 4);
+		flag = false;
+	}
+	if (way == 2) {
+		if (isValidMoveForGhost(curr.i - 1, curr.j)) {//check if right move is valid
+
+			bonusVal = kindOfFood(curr.i - 1, curr.j);
+			bonusMoveLeft(curr);
+		}
+		flag = false;
+	}
+	if (way == 4) {
+		if (isValidMoveForGhost(curr.i + 1, curr.j)) {//check if right move is valid
+
+			bonusVal = kindOfFood(curr.i + 1, curr.j);
+			bonusMoveRight(curr);
+		}
+		flag = false;
+	}
+	way = Math.floor(Math.random() * 4);
 	//}
 
 }
-function indexOfPackInFoodVal(){
+
+
+function chooseRandomWayForGhost(curr, t) {
+	let way = Math.floor(Math.random() * 4);
+	let flag = true;
+	//while (flag) {
+	if (way == 0) {
+		if (isValidMoveForGhost(curr.i, curr.j + 1)) {//check if right move is valid
+			if (canEatPack(curr.i, curr.j + 1)) {
+				packLife--;
+
+				locatePackRandomly();
+				locateGhostInCorner();
+			}
+			foodValue[t] = kindOfFood(curr.i, curr.j + 1);
+			ghostMoveDown(curr);
+		}
+		flag = false;
+	}
+	if (way == 1) {
+		if (isValidMoveForGhost(curr.i, curr.j - 1)) {//check if right move is valid
+			if (canEatPack(curr.i, curr.j - 1)) {
+				packLife--;
+
+				locatePackRandomly();
+				locateGhostInCorner();
+			}
+			foodValue[t] = kindOfFood(curr.i, curr.j - 1);
+			ghostMoveUp(curr);
+		}
+		flag = false;
+	}
+	if (way == 2) {
+		if (isValidMoveForGhost(curr.i - 1, curr.j)) {//check if right move is valid
+			if (canEatPack(curr.i - 1, curr.j)) {
+
+				packLife--;
+
+				locatePackRandomly();
+				locateGhostInCorner();
+			}
+			foodValue[t] = kindOfFood(curr.i - 1, curr.j);
+			ghostMoveLeft(curr);
+		}
+		flag = false;
+	}
+	if (way == 4) {
+		if (isValidMoveForGhost(curr.i + 1, curr.j)) {//check if right move is valid
+			if (canEatPack(curr.i + 1, curr.j)) {
+				packLife--;
+				locatePackRandomly();
+				locateGhostInCorner();
+			}
+			foodValue[t] = kindOfFood(curr.i + 1, curr.j);
+			ghostMoveRight(curr);
+		}
+		flag = false;
+	}
+	way = Math.floor(Math.random() * 4);
+	//}
+
+}
+function indexOfPackInFoodVal() {
 	// for(var e=0;e<foodValue.length;e++){
 	// 	if(foodValue[e]==2){
 	// 		return e;
@@ -576,86 +732,86 @@ function indexOfPackInFoodVal(){
 	// 		return -1;
 	// 	}
 	// }
-	for(var h=0;h<numManster;h++){
-		if(foodValue[h]==2){
-			foodValue[h]=0;
+	for (var h = 0; h < numManster; h++) {
+		if (foodValue[h] == 2) {
+			foodValue[h] = 0;
 		}
 	}
 }
-function locateGhostInCorner(){
-	if(numManster==4){
+function locateGhostInCorner() {
+	if (numManster == 4) {
 		//indexOfPackInFoodVal();
-		
-		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
-		ghosts[0].i=0;
-		ghosts[0].j=0;
+
+		board[ghosts[0].i][ghosts[0].j] = foodValue[0];
+		ghosts[0].i = 0;
+		ghosts[0].j = 0;
 		//board[0][0]=8;
-		board[ghosts[1].i][ghosts[1].j]=foodValue[1];
+		board[ghosts[1].i][ghosts[1].j] = foodValue[1];
 		//board[18][0]=9;
-		ghosts[1].i=18;
-		ghosts[1].j=0;
-		board[ghosts[2].i][ghosts[2].j]=foodValue[2];
-		ghosts[2].i=18;
-		ghosts[2].j=12;
+		ghosts[1].i = 18;
+		ghosts[1].j = 0;
+		board[ghosts[2].i][ghosts[2].j] = foodValue[2];
+		ghosts[2].i = 18;
+		ghosts[2].j = 12;
 		//board[18][12]=10;
-		board[ghosts[3].i][ghosts[3].j]=foodValue[3];
+		board[ghosts[3].i][ghosts[3].j] = foodValue[3];
 		//board[0][12]=11;
-		ghosts[3].i=0;
-		ghosts[3].j=12;
-		
+		ghosts[3].i = 0;
+		ghosts[3].j = 12;
+
 	}
-	if(numManster==3){
-	//	indexOfPackInFoodVal();
-		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
+	if (numManster == 3) {
+		//	indexOfPackInFoodVal();
+		board[ghosts[0].i][ghosts[0].j] = foodValue[0];
 		//board[0][0]=8
-		ghosts[0].i=0;
-		ghosts[0].j=0;
-		board[ghosts[1].i][ghosts[1].j]=foodValue[1];
+		ghosts[0].i = 0;
+		ghosts[0].j = 0;
+		board[ghosts[1].i][ghosts[1].j] = foodValue[1];
 		//board[18][0]=9;
-		ghosts[1].i=18;
-		ghosts[1].j=0;
-		board[ghosts[2].i][ghosts[2].j]=foodValue[2];
+		ghosts[1].i = 18;
+		ghosts[1].j = 0;
+		board[ghosts[2].i][ghosts[2].j] = foodValue[2];
 		//board[18][12]=10;
-		ghosts[2].i=18;
-		ghosts[2].j=12;
-		
-		
+		ghosts[2].i = 18;
+		ghosts[2].j = 12;
+
+
 	}
-	if(numManster==2){
-	//	indexOfPackInFoodVal();
-		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
+	if (numManster == 2) {
+		//	indexOfPackInFoodVal();
+		board[ghosts[0].i][ghosts[0].j] = foodValue[0];
 		//board[0][0]=8
-		ghosts[0].i=0;
-		ghosts[0].j=0;
-		board[ghosts[1].i][ghosts[1].j]=foodValue[1];
+		ghosts[0].i = 0;
+		ghosts[0].j = 0;
+		board[ghosts[1].i][ghosts[1].j] = foodValue[1];
 		//board[18][0]=9;
-		ghosts[1].i=18;
-		ghosts[1].j=0;
-		
-		
+		ghosts[1].i = 18;
+		ghosts[1].j = 0;
+
+
 	}
-	if(numManster==1){
+	if (numManster == 1) {
 		//indexOfPackInFoodVal();
-		board[ghosts[0].i][ghosts[0].j]=foodValue[0];
+		board[ghosts[0].i][ghosts[0].j] = foodValue[0];
 		//board[0][0]=8
-		ghosts[0].i=0;
-		ghosts[0].j=0;
-	
-		
+		ghosts[0].i = 0;
+		ghosts[0].j = 0;
+
+
 	}
-	
+
 }
 function locatePackRandomly() {
-	if(score>=10){
-		score=score-10;
+	if (score >= 10) {
+		score = score - 10;
 	}
-	else{
-		score=0;
+	else {
+		score = 0;
 	}
-	
-	
+
+
 	var emptyCell = findRandomEmptyCell(board);
-	board[shape.i][shape.j]=0;
+	board[shape.i][shape.j] = 0;
 	shape.i = emptyCell[0];
 	shape.j = emptyCell[1];
 }
@@ -670,6 +826,14 @@ function canEatPack(i, j) {
 	}
 }
 
+
+function updateBonusPosition() {
+
+	board[bonus.i][bonus.j] = bonusVal;
+	chooseRandomWayForBonus(bonus);
+	board[bonus.i][bonus.j] = 12;
+	Draw();
+}
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
 	var x = GetKeyPressed();
@@ -706,27 +870,40 @@ function UpdatePosition() {
 	if (board[shape.i][shape.j] == 7) {
 		score = score + 25;
 	}
+	if (board[shape.i][shape.j] == 12) {
+		score = score + 50;
+		window.clearInterval(intervalBonus);
+	}
+	if (board[shape.i][shape.j] == 13) {
+		timeLimit = timeLimit + 15;
+		//window.clearInterval(intervalBonus);
+	}
+	if (board[shape.i][shape.j] == 14) {
+		packLife++;
+	//	window.clearInterval(intervalBonus);
+	}
 
 
 
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
-	if (score >= 20 && time_elapsed <= 10) {
-		pac_color = "green";
-	}
+	// if (score >= 20 && time_elapsed <= 10) {
+	// 	pac_color = "green";
+	// }
 
-	if (score >= 200) {
-		window.alert("Game completed");
-		window.clearInterval(intervalPack);
-		window.clearInterval(intervalGhost);
-		score = 0;
-		showSetting();
-	}
+	// if (score >= 200) {
+	// 	window.alert("Game completed");
+	// 	window.clearInterval(intervalPack);
+	// 	window.clearInterval(intervalGhost);
+	// 	score = 0;
+	// 	showSetting();
+	// }
 
-	else {
-		Draw();
-	}
+	// else {
+	// 	Draw();
+	// }
+	Draw();
 }
 
 
@@ -742,6 +919,7 @@ function findRandomEmptyCell(board) {
 
 
 function Start() {
+	gameMusic.play();
 	board = new Array();
 	score = 0;
 	pac_color = "yellow";
@@ -752,6 +930,8 @@ function Start() {
 	start_time = new Date();
 	numManster = parseInt(numManster);
 
+	imageClock.src='images/clock.jpeg';
+	imagePill.src='images/Pill.jpeg';
 
 	for (var i = 0; i < 19; i++) {
 		board[i] = new Array();
@@ -764,7 +944,7 @@ function Start() {
 				(i == 7 && j == 1) ||
 				//(i == 8 && j == 1) ||
 				//(i == 9 && j == 1) ||
-			//	(i == 10 && j == 1) ||
+				//	(i == 10 && j == 1) ||
 				(i == 11 && j == 1) ||
 				//(i == 13 && j == 1) ||
 				(i == 15 && j == 1) ||
@@ -777,7 +957,7 @@ function Start() {
 				//(i == 1 && j == 3) ||
 				(i == 3 && j == 3) ||
 				(i == 4 && j == 3) ||
-			//	(i == 5 && j == 3) ||
+				//	(i == 5 && j == 3) ||
 				(i == 6 && j == 3) ||
 				(i == 7 && j == 3) ||
 				(i == 9 && j == 3) ||
@@ -786,14 +966,14 @@ function Start() {
 				//(i == 13 && j == 3) ||
 				(i == 14 && j == 3) ||
 				(i == 15 && j == 3) ||
-			//	(i == 17 && j == 3) ||
+				//	(i == 17 && j == 3) ||
 				(i == 1 && j == 4) ||
 				//(i == 5 && j == 4) ||
-			//	(i == 13 && j == 4) ||
+				//	(i == 13 && j == 4) ||
 				(i == 17 && j == 4) ||
 				(i == 1 && j == 5) ||
 				(i == 3 && j == 5) ||
-			//	(i == 5 && j == 5) ||
+				//	(i == 5 && j == 5) ||
 				(i == 7 && j == 5) ||
 				(i == 8 && j == 5) ||
 				(i == 10 && j == 5) ||
@@ -852,6 +1032,7 @@ function Start() {
 				board[i][j] = 4;
 			}
 			else {
+
 				if ((i == 0 && j == 0) || (i == 18 && j == 0) || (i == 18 && j == 12) || (i == 0 && j == 12)) {
 					if (numManster == 1) {
 						if (i == 0 && j == 0) {
@@ -914,11 +1095,13 @@ function Start() {
 				}
 
 				else {
+
+
 					var rnd = Math.floor(Math.random() * 3) + 5;//(5,6,7)
 					var randomNum = Math.random();
 					if (randomNum <= (1 * food_remain) / cnt) {
 
-						var rnd = Math.floor(Math.random() * 3 + 5);
+						//var rnd = Math.floor(Math.random() * 3 + 5);
 						while (countBalls(rnd) === 0 && (numOfColor5 !== 0 || numOfColor15 !== 0 || numOfColor25 !== 0)) {
 							rnd = Math.floor(Math.random() * 3 + 5);
 						}
@@ -958,10 +1141,33 @@ function Start() {
 
 	if (typeof shape.i == "undefined" || typeof shape.j == "undefined") {
 		var emptyCell = findRandomEmptyCell(board);
-		shape.i = emptyCell[0];
 		shape.j = emptyCell[1];
+		shape.i = emptyCell[0];
 		board[emptyCell[0]][emptyCell[1]] = 2;
 		pacman_remain--;
+	}
+
+
+	if (bonusFlag) {
+		var firstPos = findRandomEmptyCell(board);
+		//bonus.i = firstPos[0];
+	//	bonus.j = firstPos[1];
+		board[firstPos[0]][firstPos[1]] = 12;
+		bonusFlag = false;
+	}
+	if (clockFlag) {
+		var clockPos = findRandomEmptyCell(board);
+		//bonus.i = clockPos[0];
+		//bonus.j = clockPos[1];
+		board[clockPos[0]][clockPos[1]] = 13;
+		clockFlag = false;
+	}
+	if (pillFlag) {
+		var pillPos = findRandomEmptyCell(board);
+		//bonus.i = firstPos[0];
+	//	bonus.j = firstPos[1];
+		board[pillPos[0]][pillPos[1]] = 14;
+		pillFlag = false;
 	}
 
 
@@ -1007,9 +1213,8 @@ function Start() {
 		},
 		false
 	);
+	intervalBonus = setInterval(updateBonusPosition, 700);
 	intervalPack = setInterval(UpdatePosition, 250);
-
-
 	intervalGhost = setInterval(UpdateGhostPosition, 350);
 
 
