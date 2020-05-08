@@ -187,7 +187,7 @@ function loginFunc() {
 		return true;
 	}
 
-	window.alert("wrong pass");
+	window.alert("incorrect use name or password.");
 	return false;
 }
 
@@ -283,7 +283,7 @@ $(function () {
 		var re = /(?=.*\d)(?=.*[a-zA-Z])/;
 
 		if (password_length < 6 || !re.test($("#form_password").val())) {
-			$("#password_error_message").html("Atleast 6 Characters");
+			$("#password_error_message").html("Atleast 6 Characters(letters and digits)");
 			$("#password_error_message").show();
 			$("#form_password").css("border-bottom", "2px solid #F90A0A");
 			error_password = true;

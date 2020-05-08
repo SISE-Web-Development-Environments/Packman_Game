@@ -27,7 +27,7 @@ var imageClock = new Image();
 var imagePill = new Image();
 var pillFlag=true;
 var clockFlag=true;
-var gameMusic = new Audio("./audio/gameMusic.mpeg");
+var gameMusic = new Audio("./audio/deadMusic.mpeg");
 var ghosts = [new Object(), new Object(), new Object(), new Object()];
 // var ghost1 = new Object();//board[i][j]==8
 // var ghost2 = new Object();//board[i][j]==9
@@ -178,6 +178,7 @@ function Draw() {
 	//lblUser.value=user;
 	lblTime.value = timeLimit - time_elapsed;
 	lblTime.value = parseInt(lblTime.value);
+	
 	if (lblTime.value <= 0) {
 		if (score < 100) {
 			alert("You are better than " + score + " points!");
@@ -189,14 +190,20 @@ function Draw() {
 		}
 
 		window.clearInterval(intervalBonus);
-
 		window.clearInterval(intervalPack);
 		window.clearInterval(intervalGhost);
-
 		lblTime.value = 60;
 		showSetting();
-
 	}
+	
+	// if(food_remain==0){
+	// 	alert("Winner!!!");
+	// 	food_remain=60;
+	// 	window.clearInterval(intervalBonus);
+	// 	window.clearInterval(intervalPack);
+	// 	window.clearInterval(intervalGhost);
+	// 	showSetting();
+	// }
 	for (var i = 0; i < 19; i++) {
 		for (var j = 0; j < 13; j++) {
 			var center = new Object();
@@ -608,11 +615,7 @@ function UpdateGhostPosition() {
 			packLife = 5;
 			showSetting();
 		}
-		try {
-
-		} catch (error) {
-
-		}
+	
 		if (ghosts[t].i >= 0 && ghosts[t].i <= 18 && ghosts[t].j >= 0 && ghosts[t].j <= 12) {
 			board[ghosts[t].i][ghosts[t].j] = t + 8;
 		}
@@ -864,12 +867,15 @@ function UpdatePosition() {
 	}
 	if (board[shape.i][shape.j] == 5) {
 		score = score + 5;
+		
 	}
 	if (board[shape.i][shape.j] == 6) {
 		score = score + 15;
+		
 	}
 	if (board[shape.i][shape.j] == 7) {
 		score = score + 25;
+		
 	}
 	if (board[shape.i][shape.j] == 12) {
 		score = score + 50;
@@ -904,10 +910,22 @@ function UpdatePosition() {
 	// else {
 	// 	Draw();
 	// }
+	
 	Draw();
+	
 }
 
-
+	
+function checkIfNoBall(){
+	for(var ii=0;ii<19;ii++){
+		for(var jj=0;jj<19;jj++){
+			if(board[ii][jj]==7 ||board[ii][jj]==6 ||board[ii][jj]==5 ){
+				return false;
+			}
+		}
+	}
+	return true;
+}
 function findRandomEmptyCell(board) {
 	var i = Math.floor(Math.random() * 18 + 1);
 	var j = Math.floor(Math.random() * 12 + 1);
@@ -917,6 +935,7 @@ function findRandomEmptyCell(board) {
 	}
 	return [i, j];
 }
+
 
 
 function Start() {
@@ -932,7 +951,7 @@ function Start() {
 	numManster = parseInt(numManster);
 
 	imageClock.src="images/clock.jpeg";
-	imagePill.src="images/pill.jpeg";
+	imagePill.src="images/corona.jpeg";
 
 	for (var i = 0; i < 19; i++) {
 		board[i] = new Array();
@@ -1139,6 +1158,7 @@ function Start() {
 			}
 		}
 	}
+	
 
 	if (typeof shape.i == "undefined" || typeof shape.j == "undefined") {
 		var emptyCell = findRandomEmptyCell(board);
@@ -1226,8 +1246,8 @@ if (typeof bonus.i == "undefined" || typeof bonus.j == "undefined") {
 	intervalBonus = setInterval(updateBonusPosition, 700);
 	intervalPack = setInterval(UpdatePosition, 250);
 	intervalGhost = setInterval(UpdateGhostPosition, 350);
-
-
+	
+	
 }
 
 

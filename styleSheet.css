@@ -1,4 +1,26 @@
 
+#gameRules{
+	/* font-weight: bold; */
+	color: black;
+	font-style: italic;
+	margin: auto;
+	width: 30%;
+	border: 3px solid #c62d1f;
+	padding: 10px;
+	text-align: left;
+}
+.header{
+	/* position: fixed; */
+    width: 100%;
+    height: 94%;
+	margin: 0 auto;
+	text-align: center;
+	font-weight: bold;
+    /* border: black solid; */
+    /* background-image: url('../images/backgrounds/background.jpg'); */
+    background-size: cover;
+}
+
 #divControlers{
 	width: 400px;
 	height: 800px;
@@ -7,14 +29,23 @@
 	padding: 30px;
 }
 #canvas{
+	background-color: white;
 	border:3px solid black;
 	margin: 15px;
 	position: absolute;
     top: 150%;
-    left: 50%;
-    transform: translate(-60%, -60%);  
+	left: 50%;
+	height: 670px;
+	transform: translate(-60%, -60%);  
 
-
+}
+#game{
+	border:3px solid black;
+	margin: 15px;
+	position: fixed;
+    top: 55%;
+    left: 55%;
+	transform: translate(-60%, -60%);  
 }
 
 /* style for buttons */
@@ -59,6 +90,7 @@ input::placeholder {
 
 body
 {
+	/* background-color: black; */
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;

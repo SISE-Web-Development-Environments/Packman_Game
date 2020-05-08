@@ -80,12 +80,13 @@ function randomSetting() {
 	numOfColor25 = remain;
 	timeLimit = Math.floor(Math.random() * 100 + 60);
 	numManster = Math.floor(Math.random() * 4 + 1);
-	alert("random   " + "fr:" + foodForRestart + ".\n c5:" + color5 + ".\n c15:" + color15 + ".\n nc5:" + numOfColor5 + ".\n nc15:" + numOfColor15 + ".\n c25:" + color25 + ".\n nc25:" + numOfColor25 + ".\n limT:" + timeLimit + ".\n nManster:" + numManster);
+	//alert("random   " + "fr:" + foodForRestart + ".\n c5:" + color5 + ".\n c15:" + color15 + ".\n nc5:" + numOfColor5 + ".\n nc15:" + numOfColor15 + ".\n c25:" + color25 + ".\n nc25:" + numOfColor25 + ".\n limT:" + timeLimit + ".\n nManster:" + numManster);
 
 	$(document).ready(function () {
 		context = canvas.getContext("2d");
 		Start();
 	});
+	
 	showGame();
 }
 
@@ -219,7 +220,8 @@ $("#submitButton").click(function () {
 	checkTimeOfGame();
 	checkColors();
 	checkNumOfBalls();
-	alert("stam");
+	//
+	//alert("stam");
 	// if (error_Keys === false && error_numOfBalls === false && error_numberOfMansters === false && error_colors === false 
 	// 	&& error_timeOfGame===false) {
 	// 	alert("setting done");
