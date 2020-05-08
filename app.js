@@ -1,4 +1,4 @@
-//6/5/20 update 1.2
+//8/5/20 update 1.2
 var context;
 var remain;
 var shape = new Object();
@@ -45,6 +45,7 @@ function GetKeyPressed() {
 
 		if (keysDown[38]) {
 			packmanUp = true;
+
 			packmanLeft = false;
 			packmanRight = false;
 			packmanDown = false;

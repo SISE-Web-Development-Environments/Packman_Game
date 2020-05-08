@@ -1,5 +1,7 @@
 
 var numManster;
+
+
 var foodForRestart;
 function submitSetting() {
 

@@ -47,7 +47,17 @@
     left: 55%;
 	transform: translate(-60%, -60%);  
 }
-
+/* #newGameBut{
+	
+	right: 0;
+	
+	border: solid black;
+	padding: 0px;
+	float: right;
+} */
+body {
+	background-image: url('./images/shofiya-jerrin-bg.jpg');
+  }
 /* style for buttons */
 .myButton {
 	box-shadow: 3px 4px 0px 0px #8a2a21;
@@ -108,7 +118,8 @@ body
 	left: 50%;
 	transform: translate(0%,0%);
 	width: 700px;
-	background: #fff;
+	background:yellow;
+	/* background: #fff; */
   padding: 45px;
   margin-left: 300px;
 	box-sizing: border-box;
@@ -136,6 +147,9 @@ body
 	border:none;
 	border-bottom: 2px solid #999;
 }
+.forminput{
+	background-color: yellow;
+}
 .container input[type="submit"]
 {
 	border-radius: 25px;
@@ -151,6 +165,7 @@ body
 	background: #34F458;
 	color: #fff;
 }
+
 .container form div
 {
 	position: relative;

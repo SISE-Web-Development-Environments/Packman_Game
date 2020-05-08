@@ -37,9 +37,10 @@
 </head>
 
 <body>
-	<div class ="header">
-		<div style="color: grey;">
-			<b>dean blinder and yzhar chenov</b>
+	
+	<div class ="header" style="padding-left: 60px;">
+		<div style="color: black; text-align: left; font-size: 20px; font-style: oblique;" >
+			<b>created by dean blinder and yzhar chenov</b>
 		</div>
 
 	</div>
@@ -93,77 +94,65 @@
 			<br>
 		</div>
 
-		<div id="gameRules" class="container">
+		<div id="gameRules" class="container" style="padding-left: 30px; font-weight: bold;">
 			<p>
-				the rules of the game:<br>
-				eat as much ballls as you can,<br>
-				small balls are 5 points,<br>
-				medium balls are 15 points,<br>
-				large balls are 25 points.<br>
-				if you eat the clock you gain time.<br>
-				if you eat the coronaVirus you gain one life.<br>
-				you have 5 life if ghost eats you, you lose one life.<br>
-				good luck.
+				<h1 style="color: #c62d1f; font-weight: bold;">GAME RULES</h1>
+				-  eat as much ballls as you can,<br>
+				-  small balls are 5 points,<br>
+				-  medium balls are 15 points,<br>
+				-  large balls are 25 points.<br>
+				-  if you eat the clock you gain time.<br>
+				-  if you eat the coronaVirus you gain one life.<br>
+				-  you have 5 life if ghost eats you, you lose one life.<br>
+				   <p style="font-size: 50px; text-align: center; color: rgb(39, 40, 58);">good luck.</p>
 			</p>
 		</div>
 <div id="RegisterSection" style="display: none;" >
-	<div class="container">
-		<h1>REGISTER</h1>
-		<form id="registration_form" onsubmit="allfill()" >
+	<div class="container" style="width: 700px; height: 600px;">
+		<h1 style="color: #c62d1f; font-weight: bold;">REGISTER</h1>
+		<form id="registration_form" onsubmit="allfill()" style="height: 500px; ">
 			<div>
-				<input type="text" id="form_username" name="" >
-				<br>
+				<input class="forminput" type="text" id="form_username" name="" >				
 				<span class="error_form" id="userName_error_message"></span>
-				<br>
-				<br>
-				<label
-				>user Name
+				<label>
+					user Name
 				</label>	
 			</div>
-			<div>
-			
-				<input type="text" id="form_fname" name="" >
-				<br>
-				<span class="error_form" id="fname_error_message" ></span>
-				
+			<div>		
+				<input class="forminput" type="text" id="form_fname" name="" >			
+				<span class="error_form" id="fname_error_message" ></span>			
 				<label>
 					First Name
 				</label>	
 			</div>
 			<div>
-				<input type="text" id="form_sname" name="" style="height: 2px;" >
-				<br>
+				<input class="forminput" type="text" id="form_sname" name="" style="height: 2px;" >			
 				<span class="error_form" id="sname_error_message"></span>
-				<br>
-				<br>
 				<label>
 					Last Name
 				</label>	
 			</div>
 			<div>
-				<input type="email" id="form_email" name=""  >
-				<br>
+				<input  class="forminput" type="email" id="form_email" name=""  >
+			
 				<span class="error_form" id="email_error_message"></span>
-				<br>
-				<br>
+			
 				<label>Email</label>	
 			</div>
 			<div>
-				<input type="password" id="form_password" name="" >
-				<br>
+				<input class="forminput" type="password" id="form_password" name="" >
+				
 				<span class="error_form" id="password_error_message"></span>
-				<br>
-				<br>
+				
 				<label>Password</label>	
 			</div>
 			<div>
-				<p><input type="text" name="" id="datepickerform" placeholder="BirthDate"   autocomplete="off"></p>
-				<br>
+				<p><input class="forminput" type="text" name="" id="datepickerform" placeholder="BirthDate"  autocomplete="off"></p>
+				
 				<span class="error_form" id="birthday_error_message"></span>
-				<br>
-				<br>
+				
 			</div>
-			<input id="but11" class="but1" type="button"  value="Register"  name="" onclick="registerFunc()" >
+			<input id="but11" class="myButton" type="button"  value="Register"  name="" onclick="registerFunc()" >
 			
 		</form>
 		
@@ -174,23 +163,21 @@
 
 
 <div id="LoginSection" style="display: none">
-	<div class="container">
-		<h1>Login</h1>
-		<form id="login_form"  action="javascript:alert( 'success!' );">
+	<div class="container" style="width: 400px; padding-left: 30px;">
+		<h1  style="color: #c62d1f; font-weight: bold; text-align: left;">Login</h1>
+		<form id="login_form"  action="javascript:alert( 'success!' );" style="height: 170px;">
 			<div>
-				<input type="text" id="login_username" name="" required="">
+				<input class="forminput" type="text" id="login_username" name="" required="">
 				<label>userName</label>	
 			</div>
 			
 			<div>
-				<input type="password" id="login_password" name="" required="">
+				<input class="forminput" type="password" id="login_password" name="" required="">
 				<label>Password</label>	
 			</div>
 			<br>
-				<span class="login_error" id="passwordUser_error_message"></span>
-			
-			<button type="button" id = "LoginFormButton" class="but1"  value="Login"  onclick="loginFunc()" name="">
-				
+			<span class="login_error" id="passwordUser_error_message"></span>
+			<button type="button"  value="Login"  name=""  id="LoginFormButton" class="myButton" style="width: 200px; height: 30px;" onclick="loginFunc()">	
 		</form>
 	</div>
 	<br>
@@ -203,89 +190,83 @@
 	<div id='SettingsSection' class='section' style="display: none">
 		
 		<div class="container">
-			<h1>set up conterollers</h1>
+			<h1 style="font-weight: bold; color:#c62d1f ;">SETTINGS</h1>
+			<h1 style="font-size: 20px; color: #c62d1f;">to set up random setting press random</h1>
 			
 			<form action="" id="formControlers"  method="post">
 				<div>
 					
-					<input id = "upKey" type="text" maxlength="1" minlength="1" required=""><br>
-					<br>
+					<input  class="forminput" id = "upKey" type="text" maxlength="1" minlength="1" required="">
 				<!-- <span class="error_form" id="upKey_error_message"></span> -->
-					<br>
 					<label>Choose up key:</label>
 						
 				</div>
 				<div>
-				
-					
-					<input id= "downKey" type="text" maxlength="1" minlength="1" required=""><br>
+					<input class="forminput" id= "downKey" type="text" maxlength="1" minlength="1" required="">
 					<label>Choose down key:</label>
 					<!-- <span class="error_form" id="downKey_error_message"></span> -->
-					<br>
 					
 				</div>
 				<div>
 					
-					<input id= "rightKey" type="text" maxlength="1" minlength="1" required=""><br>
+					<input class="forminput" id= "rightKey" type="text" maxlength="1" minlength="1" required="">
 					<label>Choose right key:</label>
 					<!-- <span class="error_form" id="rightKey_error_message"></span> -->
-					<br>
 					
 				</div>
 				<div>
 					
-					<input id= "leftKey" type="text" maxlength="1" minlength="1" required=""><br>
+					<input class="forminput" id= "leftKey" type="text" maxlength="1" minlength="1" required="">
 					<span class="error_form" id="keys_error_message"></span>
-					<br>
+					
 					
 					<label>Choose left key:</label>
 				</div>
 				<div>
 					
-					<input id="numOfBalls" type="number" min="50" max="90" required=""><br>
+					<input class="forminput" id="numOfBalls" type="number" min="50" max="90" required="">
 					<span class="error_form" id="numOfBalls_error_message"></span>
-					<br>
+					
 					
 					<label>Choose number of balls(between 50-90):</label>
 				</div>
 				<div>
 					
-					<input type="color" id="color5p"   required=""><br>
+					<input  class="forminput" type="color" id="color5p"   required="">
 					<label>Choose 5 point balls:</label>
 				</div>
 				<div>
 					
-					<input type="color" id="color15p" required =""><br>
+					<input class="forminput" type="color" id="color15p" required ="">
 					<label>Choose 15 point balls:</label>
 				</div>
 				<div>
 					
-					<input type="color" id="color25p"  required=""><br>
+					<input  class="forminput" type="color" id="color25p"  required="">
 					
 					<label>Choose 25 point balls:</label>
 				</div>
-				<span class="error_form" id="colors_error_message"></span>
-					<br>		
+				<span class="error_form" id="colors_error_message"></span>		
 				<div>
 					
-					<input id="timeOfGame" type="number" min="60"  required=""><br>	
+					<input class="forminput" id="timeOfGame" type="number" min="60"  required="">
 					<span class="error_form" id="timeOfGame_error_message"></span>
-					<br>
+					
 					
 					<label>set time:</label>
 				</div>
 				<div>
 					
-					<input id="numberOfMansters" type="number" min="1" max="4" required=""><br> 
+					<input  class="forminput" id="numberOfMansters" type="number" min="1" max="4" required="">
 					<span class="error_form" id="numberOfMansters_error_message"></span>
-					<br>
-					<br>
+					
+					
 					<label>set numer of mansters(between 1-4):</label>
 				</div>
-				<input type="button" id="randomButton" class="but1"  value="random"  onclick="randomSetting()" name="">
-						<input type="button" id="submitButton"  class="but1"  value="submit"   name="" onclick="submitSetting()" >
+				<input type="button" id="randomButton" class="myButton"  value="random"  onclick="randomSetting()" name="">
+				<input type="button" id="submitButton"  class="myButton"  value="submit"   name="" onclick="submitSetting()" >
 						
-						<br>
+						
 			</form>
 			
 		</div>
@@ -300,65 +281,47 @@
 
 
 	<div id='GamePlaySection' class='section' style="display: none;" >
+		
 		<div id="life">
-			<button id="newGameButton" type="button" onclick="startNewGame()" class="myButton"
-			style="width: 10%;">new game</button>
+			
 		</div>
 
 		<div id="life">
-			<label for="lblLife">LIFE:</label>
-			<input id="lblLife" type="text" />
+			<label for="lblLife" style="color: crimson; font-weight: 800; font-size: 40px;">LIFE:</label><br>
+			<input style="background-color: green; font-size: large; color: red;" id="lblLife" type="text"  />
 		</div>
 
 		<div id="playerName">
-			<label for="lblUser">USER NAME:</label>
-			<input id="lblUser" type="text" />
+			<label style="color: crimson; font-weight: 800; font-size: 40px;" for="lblUser">USER NAME:</label><br>
+			<input id="lblUser" type="text" style="background-color: green; font-size: large; color: red;" />
 		</div>
 		<div id="score">
-			<label for="lblScore">SCORE:</label>
-			<input id="lblScore" type="text" />
+			<label style="color: crimson; font-weight: 800; font-size: 40px;" for="lblScore">SCORE:</label><br>
+			<input id="lblScore" type="text" style="background-color: green; font-size: large; color: red;" />
 		</div>
 		<div id="time">
-			<label for="lblTime">TIME:</label>
-			<input id="lblTime" type="text" />
+			<label style="color: crimson; font-weight: 800; font-size: 40px;" for="lblTime">TIME:</label><br>
+			<input id="lblTime" type="text" style="background-color: green; font-size: large; color: red;"/>
 		</div>
+		<br>
+		<br>
+		<div id="newGameBut">
+			<button style="padding-right: 100px; color: yellow;" id="newGameButton" type="button" onclick="startNewGame()" class="myButton"
+			style="width: 150px; height: 100px;">new game</button>
+		</div>
+		
 		<div id="game">
 			<canvas id="canvas" height="780.5" width="1140"></canvas>
 		</div>
 	</div>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
 	
-	<br>
-	<br>
 	
 
-	<footer style="text-align:left;">
-        <span>This game created by yzhar chenov and dean blinder from ben gurion university in ISE department.<br></span>
-        <span>deanb@post.bgu.ac.il </span>
+	<footer style="text-align:left; font-style: oblique; font-weight: bold;">
+        <span>This game created by yzhar chenov and dean blinder from ben gurion university in ISE department.
+        <span>deanb@post.bgu.ac.il </span> 
 		<a style="padding-bottom:25px;" style="text-align: center;" href="mailto:deanb@post.bgu.ac.il">contact</a>
-		<span>yzhar@post.bgu.ac.il </span>
+		<span>yzhar@post.bgu.ac.il  </span>
 		<a style="padding-bottom:25px;" style="text-align: center;" href="mailto:yzhar@post.bgu.ac.il">contact</a>
     </footer>
 

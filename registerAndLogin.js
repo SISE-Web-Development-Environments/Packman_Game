@@ -179,7 +179,10 @@ function loginFunc() {
 	var logpassward = document.getElementById("login_password").value;
 	var temp = localStorage.getItem(loguserName);
 	document.getElementById("lblUser").value = " " + loguserName;
-	
+	if(loguserName=="" || logpassward==""){
+		window.alert("incorrect use name or password.");
+		return false;
+	}
 	if (temp == logpassward) {
 		window.alert("confirm");
 	
