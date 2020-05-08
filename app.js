@@ -826,9 +826,10 @@ function canEatPack(i, j) {
 	}
 }
 
-
 function updateBonusPosition() {
 
+	bonus.i=parseInt(bonus.i);
+	bonus.j=parseInt(bonus.j);
 	board[bonus.i][bonus.j] = bonusVal;
 	chooseRandomWayForBonus(bonus);
 	board[bonus.i][bonus.j] = 12;
@@ -930,8 +931,8 @@ function Start() {
 	start_time = new Date();
 	numManster = parseInt(numManster);
 
-	imageClock.src='images/clock.jpeg';
-	imagePill.src='images/Pill.jpeg';
+	imageClock.src="images/clock.jpeg";
+	imagePill.src="images/Pill.jpeg";
 
 	for (var i = 0; i < 19; i++) {
 		board[i] = new Array();
@@ -1150,11 +1151,20 @@ function Start() {
 
 	if (bonusFlag) {
 		var firstPos = findRandomEmptyCell(board);
-		//bonus.i = firstPos[0];
-	//	bonus.j = firstPos[1];
+		bonus.i = firstPos[0];
+		bonus.j = firstPos[1];
 		board[firstPos[0]][firstPos[1]] = 12;
 		bonusFlag = false;
 	}
+
+	
+if (typeof bonus.i == "undefined" || typeof bonus.j == "undefined") {
+	var emptyCellBonus = findRandomEmptyCell(board);
+	bonus.j = emptyCellBonus[1];
+	bonus.i = emptyCellBonus[0];
+	board[emptyCellBonus[0]][emptyCellBonus[1]] = 12;	
+}
+
 	if (clockFlag) {
 		var clockPos = findRandomEmptyCell(board);
 		//bonus.i = clockPos[0];
