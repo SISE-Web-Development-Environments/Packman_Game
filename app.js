@@ -932,7 +932,7 @@ function Start() {
 	numManster = parseInt(numManster);
 
 	imageClock.src="images/clock.jpeg";
-	imagePill.src="images/Pill.jpeg";
+	imagePill.src="images/pill.jpeg";
 
 	for (var i = 0; i < 19; i++) {
 		board[i] = new Array();
