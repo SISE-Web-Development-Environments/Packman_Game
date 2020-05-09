@@ -1244,7 +1244,7 @@ if (typeof bonus.i == "undefined" || typeof bonus.j == "undefined") {
 		},
 		false
 	);
-	intervalBonus = setInterval(updateBonusPosition, 700);
+	intervalBonus = setInterval(updateBonusPosition, 400);
 	intervalPack = setInterval(UpdatePosition, 250);
 	intervalGhost = setInterval(UpdateGhostPosition, 350);
 	
