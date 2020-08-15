@@ -11,3 +11,4 @@ clock - Eating the clock will add 15 seconds to the game time.
 moving star -  Eating the star will add 50 points to the score.
 
 coronaVirus Life - eating the coronaVirus will increase your life by 1.
+[![SC2 Video](doc/SC2_youtube.gif)](https://www.youtube.com/watch?v=--b-9HrKK6w)
