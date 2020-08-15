@@ -12,5 +12,5 @@ moving star -  Eating the star will add 50 points to the score.
 
 coronaVirus Life - eating the coronaVirus will increase your life by 1.
 
-
+![](https://kapwi.ng/c/YFAs79d0)
 
